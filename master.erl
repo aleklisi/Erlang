@@ -42,4 +42,3 @@ start_master(ProblemLen, NumberOfThreads) ->
 	ChildrenPids = start_children(Ranges),
 	loop_master(ChildrenPids,[]).
 	
-test() -> start_master(20,2). 
