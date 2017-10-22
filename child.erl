@@ -13,7 +13,7 @@ remove_all_devidable_by_elem([H|T],Elem) ->
 	
 child_thread_loop([],MasterPid) -> 
 	erlang:send(MasterPid,end_of_numbers),
-	io:fwrite("Child ~p finished its task.\n",[self()]);
+	io:fwrite("Child ~p finished its task on ~p.\n",[self(),time()]);
 child_thread_loop([H|T],MasterPid) -> 
 	receive
 		you_are_the_smallest ->
@@ -27,7 +27,6 @@ child_thread_loop([H|T],MasterPid) ->
 	child_thread_loop(NewList,MasterPid).
 	
 child_thread_start({Start,Stop},MasterPid) ->
-	io:fwrite("Child ~p started its task.\n",[self()]),
 	List = lists:seq(Start,Stop,1),
 	child_thread_loop(List,MasterPid).
 
