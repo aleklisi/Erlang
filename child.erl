@@ -1,5 +1,6 @@
 -module(child).
 -compile([export_all]).
+-export([start_children/1, test/0]).
 
 remove_all_devidable_by_elem([H|T],Elem) ->
 		case (H rem Elem) == 0 of
