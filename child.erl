@@ -2,6 +2,7 @@
 -compile([export_all]).
 -export([start_children/1, test/0]).
 
+remove_all_devidable_by_elem([],_) -> [];
 remove_all_devidable_by_elem([H|T],Elem) ->
 		case (H rem Elem) == 0 of
 			true ->
@@ -11,7 +12,7 @@ remove_all_devidable_by_elem([H|T],Elem) ->
 		end.
 	
 child_thread_loop([],MasterPid) -> 
-	erlang:send(MasterPid,false),
+	erlang:send(MasterPid,end_of_numbers),
 	io:fwrite("Child finished its task.\n");
 child_thread_loop([H|T],MasterPid) -> 
 	receive
@@ -30,11 +31,18 @@ child_thread_start({Start,Stop},MasterPid) ->
 	List = lists:seq(Start,Stop,1),
 	child_thread_loop(List,MasterPid).
 
-start_children([]) -> 
-	io:fwrite("All childen started working.\n");
+remove_all([],_) -> [];
+remove_all([H|T],Elem) ->
+	case H == Elem of
+			true -> remove_all(T,Elem);
+			false -> [H] ++ remove_all(T,Elem)
+		end.	
+	
+start_children([]) -> [];
 start_children([H|T]) ->
 	ChildPid = spawn(child, child_thread_start, [H,self()]),
 	[ChildPid] ++ start_children(T).
+	
 	
 test() -> 
 	start_children([{2,10},{11,20},{3,30}]). 
