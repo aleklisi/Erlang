@@ -20,7 +20,6 @@ child_thread_loop([H|T],MasterPid) ->
 			erlang:send(MasterPid,{new_prime_is,H}),
 			NewList = remove_all_devidable_by_elem(T,H);
 		{cut_out,Prime} ->
-			
 			NewList = remove_all_devidable_by_elem([H|T],Prime);
 		_ -> io:fwrite("SPAM"),
 			NewList = [H|T]
