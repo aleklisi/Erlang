@@ -1,10 +1,28 @@
 -module(child).
 -compile([export_all]).
 
+remove_all_devidable_by_elem([H|T],Elem) ->
+		case (H rem Elem) == 0 of
+			true ->
+				remove_all_devidable_by_elem(T,Elem);
+			false ->
+				[H] ++ remove_all_devidable_by_elem(T,Elem)
+		end.
+	
 child_thread_loop([],MasterPid) -> 
-	erlang:send(MasterPid,nothing_is_left),
+	erlang:send(MasterPid,false),
 	io:fwrite("Child finished its task.\n");
 child_thread_loop([H|T],MasterPid) -> 
+	receive
+		you_are_the_smallest ->
+			erlang:send(MasterPid,{new_prime_is,H}),
+			NewList = remove_all_devidable_by_elem(T,H);
+		{cut_out,Prime} ->
+			NewList = remove_all_devidable_by_elem([H|T],Prime);
+		_ -> io:fwrite(""),
+			NewList = [H|T]
+	end,
+	child_thread_loop(NewList,MasterPid),
 	io:fwrite("Child is in loop.\n").
 	
 child_thread_start({Start,Stop},MasterPid) ->
