@@ -11,6 +11,7 @@ cabal-dev
 *.beam
 .hsenv
 .cabal-sandbox/
+path.txt
 cabal.sandbox.config
 *.prof
 *.aux
