@@ -31,4 +31,4 @@ test_scenario(6) -> remove_duplicate_characters("ymmca") =:= "ymca";
 test_scenario(7) -> remove_duplicate_characters("ymcaa") =:= "ymca";
 test_scenario(8) -> remove_duplicate_characters("ymcccca") =:= "ymca";
 test_scenario(9) -> remove_duplicate_characters("yyyymmmmmmmmmmmccccaaaaa") =:= "ymca";
-test_scenario(_) -> tr.
+test_scenario(_) -> true.
