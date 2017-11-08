@@ -38,10 +38,33 @@ tree_to_list_rnl(empty) -> [];
 tree_to_list_rnl({Content,Left,Right}) -> 
 	tree_to_list_rnl(Right) ++ [Content] ++ tree_to_list_rnl(Left).
 	
-%szukanie elementu w drzewie (wersja "zwyczajna" i wersja "wyjątkowa")
+%szukanie elementu w drzewie (wersja "zwyczajna")
 tree_search(_,empty) -> false;
 tree_search(Elem, {Elem,_,_}) -> true;
-tree_search(Elem, {Content,Left,Right}) -> tree_search(Elem,Left) or tree_search(Elem,Right).
+tree_search(Elem, {_,Left,Right}) -> tree_search(Elem,Left) or tree_search(Elem,Right).
+	
+%szukanie elementu w drzewie (wersja "wyjątkowa")
+get_search_result(0) -> false;
+get_search_result(N) -> 
+	receive
+		found -> true;
+		new -> get_search_result(N+1);
+		not_found -> get_search_result(N-1)
+	end.
+
+start_tree_search_multithread(_,empty) -> false;
+start_tree_search_multithread(Elem,Tree) -> 
+	spawn(tree,tree_search_multithread,[self(),Elem,Tree]),
+	get_search_result(1).
+
+tree_search_multithread(RootPID,_,empty) -> erlang:send(RootPID,not_found);
+tree_search_multithread(RootPID,Elem,{Elem,_,_}) -> 
+	erlang:send(RootPID,found),
+	exit("");
+tree_search_multithread(RootPID,Elem,{_,Left,Right}) ->  
+	erlang:send(RootPID,new),
+	spawn(tree, tree_search_multithread, [RootPID,Elem,Left]),
+	spawn(tree, tree_search_multithread, [RootPID,Elem,Right]).
 
 %pom for testing
 list_remove(_, []) -> [];
