@@ -7,11 +7,8 @@ get_list_of_random_numbers() -> [rand:uniform(20) || _ <- lists:seq(1,5)].
 
 %wstawianie elementu do drzewa
 insert(Elem,{tree,empty}) -> {tree,Elem,{tree,empty},{tree,empty}};
-insert(Elem,{tree,Content,Left,Right}) -> 
-	case Elem > Content of 
-		true -> {tree,Content,insert(Elem, Left),Right};		
-		false -> {tree,Content,Left,insert(Elem,Right)}
-	end.
+insert(Elem,{tree,Content,Left,Right}) when Elem > Content -> {tree,Content,insert(Elem, Left),Right};		
+insert(Elem,{tree,Content,Left,Right}) when Elem =< Content -> {tree,Content,Left,insert(Elem,Right)}.
 
 %generacja drzewa z listy
 insert_from_list([], Tree) -> Tree;
