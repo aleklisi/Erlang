@@ -2,12 +2,12 @@
 -compile([export_all]).
 
 last_or_not(null,Candydate) -> 
-	io:fwrite("prime ~p at ~p\n",[Candydate,time()]),
+	io:fwrite("~p at: ~p\n",[Candydate,time()]),
 	spawn(potok, middle_man, [null,Candydate]);
 last_or_not(Next_Pid,Candydate) ->
 	erlang:send(Next_Pid,{check,Candydate}),
 	Next_Pid.
-
+	
 eliminating_divadable(Prime,Candydate,Next_Pid)->
 	case (Candydate rem Prime) == 0 of
 		false -> New_Pid = last_or_not(Next_Pid,Candydate);

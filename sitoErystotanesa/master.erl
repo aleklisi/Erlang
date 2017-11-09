@@ -25,6 +25,7 @@ loop_master(ChildrenPids,Primes) ->
 	erlang:send(H,you_are_the_smallest),
 	receive
 		{new_prime_is,NewPrime} ->
+				%io:fwrite("~p at: ~p\n",[NewPrime,time()]),
 			send_to_all(ChildrenPids,{cut_out,NewPrime}),
 			NewPrimes = Primes ++ [NewPrime],
 			NewChildrenPids = ChildrenPids;
@@ -43,7 +44,7 @@ start_master(ProblemLen, NumberOfThreads) ->
 	loop_master(ChildrenPids,[]).
 	
 test() -> 
-	TaskTimeToCalculate = 1000 * 1000  * 10,
+	TaskTimeToCalculate = 1000 * 10,
 	NumberOfThreads = 32,
 	io:fwrite("Start time is ~p\n",[time()]),
 	start_master(TaskTimeToCalculate,NumberOfThreads),
