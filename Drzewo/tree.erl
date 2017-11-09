@@ -3,8 +3,7 @@
 
 %Napisz moduł drzewa binarnego zawierający następujące funkcje:
 %generacja losowego drzewa (liczby)
-
-get_list_of_random_numbers() -> [rand:uniform(20) || _ <- lists:seq(1, 10)].
+get_list_of_random_numbers() -> [rand:uniform(20) || _ <- lists:seq(1, 1000)].
 
 %wstawianie elementu do drzewa
 tree_insert(Elem,empty) -> 
@@ -44,36 +43,15 @@ tree_search(Elem, {Elem,_,_}) -> true;
 tree_search(Elem, {_,Left,Right}) -> tree_search(Elem,Left) or tree_search(Elem,Right).
 	
 %szukanie elementu w drzewie (wersja "wyjątkowa")
-get_search_result(0) -> false;
-get_search_result(N) -> 
-	receive
-		found -> true;
-		new -> get_search_result(N+1);
-		not_found -> get_search_result(N-1)
-	end.
-
-start_tree_search_multithread(_,empty) -> false;
-start_tree_search_multithread(Elem,Tree) -> 
-	spawn(tree,tree_search_multithread,[self(),Elem,Tree]),
-	get_search_result(1).
-
-tree_search_multithread(RootPID,_,empty) -> erlang:send(RootPID,not_found);
-tree_search_multithread(RootPID,Elem,{Elem,_,_}) -> 
-	erlang:send(RootPID,found),
-	exit("");
-tree_search_multithread(RootPID,Elem,{_,Left,Right}) ->  
-	erlang:send(RootPID,new),
-	spawn(tree, tree_search_multithread, [RootPID,Elem,Left]),
-	spawn(tree, tree_search_multithread, [RootPID,Elem,Right]).
-
-%pom for testing
-list_remove(_, []) -> [];
-list_remove(Elem, [Elem|T]) -> T;
-list_remove(Elem, [H|T]) -> [H] ++ list_remove(Elem,T).
-
-list_anagram([],[]) -> true;
-list_anagram(_,[]) -> false;
-list_anagram([],_) -> false;
-list_anagram([H|T],List2) -> 
-	NewList2 = list_remove(H, List2),
-	list_anagram(T,NewList2).
+tree_search_exception(Elem,Tree) ->
+	try  tree_search_e(Elem,Tree) of
+		_ -> not_found
+	catch
+		_:_ -> found
+		end.
+	
+tree_search_e(_,empty) -> not_found;
+tree_search_e(Elem, {Elem,_,_}) -> throw(found);
+tree_search_e(Elem, {_,Left,Right}) -> 
+	tree_search_e(Elem,Left),
+	tree_search_e(Elem,Right).
