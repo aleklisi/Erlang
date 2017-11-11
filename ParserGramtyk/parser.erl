@@ -19,6 +19,13 @@ rule(7,0) -> [1];
 rule(8,1) -> [a,b];
 rule(9,1) -> [a,1,b];
 
+%gramatyka a^n b^n c^k d^k
+rule(10,0) -> [1,2];
+rule(11,1) -> [a,1,b];
+rule(12,1) -> [a,b];
+rule(13,2) -> [c,2,d];
+rule(14,2) -> [c,d];
+
 rule(_RuleNumber,_Variable) -> [removethislist].
 
 %gramatyka {a,aa,aaa,aaaa,...}
@@ -27,6 +34,8 @@ gramatyka(1) -> [1,2,3];
 gramatyka(2) -> [4,5,6]; 
 %gramatyka a^n b^n
 gramatyka(3) -> [7,8,9];
+%gramatyka a^n b^n c^k d^k
+gramatyka(4) -> [10,11,12,13,14];
 
 gramatyka(_) -> io:fwrite("Ta grmatyka jeszcze nie istnieje\n").
 
