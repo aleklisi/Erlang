@@ -1,10 +1,8 @@
 -module(parser).
 -compile([export_all,debug_info]).
-%-export([run/3]).
--import(list_com,[list_devide_to_three/1,list_remove_empty/1]).
+-export([run/3]).
+-import(list_com,[list_devide_to_three/1,list_remove_empty/1,remove_duplicates/1]).
 -import(gramatyki,[rule/2,gramatyka/1]).
-
-
 
 applay_single_rule_to_single_word(RuleNumber,{WordP,WordS,WordK}) ->
     RuleResult = gramatyki:rule(RuleNumber,WordS),
@@ -43,4 +41,11 @@ iterate_words(Words,ListOfRules) ->
 run(0,_,StartWords) -> StartWords;
 run(Iteration,NumerGramtyki,StartWords) -> 
     NewWords = iterate_words(StartWords,gramatyki:gramatyka(NumerGramtyki)),
-    NewWords ++ run(Iteration - 1,NumerGramtyki,NewWords).
+    DupicatesRemoved = list_com:remove_duplicates(NewWords),
+    DupicatesRemoved ++ run(Iteration - 1,NumerGramtyki,DupicatesRemoved).
+
+
+go() -> wypisz(list_com:remove_duplicates(run(8,6,[[0]]))).
+
+wypisz([H|T]) -> io:fwrite("~p\n",[H]),wypisz(T); 
+wypisz([]) -> ok.

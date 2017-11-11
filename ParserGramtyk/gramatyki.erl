@@ -27,10 +27,19 @@ rule(13,[2]) -> [c,2,d];
 rule(14,[2]) -> [c,d];
 
 %gramatyka gra w kule
-rule(15,[b|b]) -> [b];
+rule(15,[b,b]) -> [b];
 rule(16,[c,c]) -> [b];
 rule(17,[b,c]) -> [c];
 rule(18,[c,b]) -> [c];
+
+%gramatyka a^n b^n c^n
+rule(19,[0]) -> [1,2];
+rule(20,[1,2]) -> [1,1,2,2];
+rule(21,[1,2]) -> [a,b,c];
+rule(22,[c,2]) -> [c,c];
+rule(23,[1,a]) -> [a,a,3];
+rule(24,[3,a]) -> [a,3];
+rule(25,[3,b]) -> [b,b];
 
 
 rule(_RuleNumber,_Variable) -> removethislist.
@@ -45,5 +54,8 @@ gramatyka(3) -> [7,8,9];
 gramatyka(4) -> [10,11,12,13,14];
 %gramatyka gra w kule
 gramatyka(5) -> [15,16,17,18];
+%gramatyka a^n b^n c^n
+gramatyka(6) -> [19,20,21,22,23,24,25];
+
 
 gramatyka(_) -> io:fwrite("Ta grmatyka jeszcze nie istnieje\n").

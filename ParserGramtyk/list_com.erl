@@ -1,6 +1,6 @@
 -module(list_com).
 -compile([export_all,debug_info]).
--export([list_devide_to_three/1,list_remove_empty/1]).
+-export([list_devide_to_three/1,list_remove_empty/1,remove_duplicates/1]).
 
 list_devide(0,_) -> [];
 list_devide(N,List) -> [lists:split(N - 1,List)] ++ list_devide(N - 1,List).
@@ -26,3 +26,7 @@ list_devide_to_three(List) ->
 list_remove_empty([]) -> [];
 list_remove_empty([H|T]) when H =:= [] -> list_remove_empty(T);
 list_remove_empty([H|T]) when H =/= [] -> [H] ++ list_remove_empty(T).
+
+remove_duplicates(List) ->
+        Set = sets:from_list(List),
+        sets:to_list(Set).
