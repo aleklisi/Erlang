@@ -6,6 +6,7 @@ cabal-dev
 *.chi
 *.chs.h
 *.dyn_o
+*.pdf
 *.dyn_hi
 .hpc
 *.beam
