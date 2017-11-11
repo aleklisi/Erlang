@@ -1,40 +1,46 @@
 -module(parser).
--compile([export_all]).
--export([run/2]).
--import(list_com,[list_devide_to_three/1]).
+-compile([export_all,debug_info]).
+%-export([run/3]).
+-import(list_com,[list_devide_to_three/1,list_remove_empty/1]).
 -import(gramatyki,[rule/2,gramatyka/1]).
 
-add_to_each_list_new_begginnig([],_) -> [];
-add_to_each_list_new_begginnig([H|T],Elem) -> [[Elem] ++ H | add_to_each_list_new_begginnig(T,Elem)].
 
-applay_single_rule(_,[]) -> [];
-applay_single_rule(RuleNumber,[H|T]) -> 
-    RuleResult = rule(RuleNumber,H),
-    RestOfWord = applay_single_rule(RuleNumber,T),
-    FullWords = add_to_each_list_new_begginnig(RestOfWord,H),
+
+applay_single_rule_to_single_word(RuleNumber,{WordP,WordS,WordK}) ->
+    RuleResult = gramatyki:rule(RuleNumber,WordS),
     case RuleResult of
-        [removethislist] -> FullWords;
-        _ -> [RuleResult ++ T] ++ FullWords
+        removethislist -> 
+            cantapplayrule; 
+        _ -> 
+            WordP ++ RuleResult ++ WordK
     end.
 
-applay_all_rules_from_list(Word,[]) -> Word;
-applay_all_rules_from_list(Word,RuleNumbers) ->
-    [H|T] = RuleNumbers,
-    ListOfSolutionsWithDuplicates = applay_single_rule(H,Word) ++ applay_all_rules_from_list(Word,T),
-    SetOfSolutionsWith = sets:from_list(ListOfSolutionsWithDuplicates),
-    Pom = sets:from_list([0,Word] ++ Word),
-    SetOfSolutions = sets:subtract(SetOfSolutionsWith,Pom),
-    sets:to_list(SetOfSolutions).
+applay_single_rule_to_list_of_words(_,[]) -> [];
+applay_single_rule_to_list_of_words(RuleNumber,ListOfDevidedWords) ->
+    [H|T] = ListOfDevidedWords,
+    NewWord = applay_single_rule_to_single_word(RuleNumber,H),
+    case NewWord of 
+        cantapplayrule -> applay_single_rule_to_list_of_words(RuleNumber,T);
+        _ -> NewWord ++ applay_single_rule_to_list_of_words(RuleNumber,T)
+    end.
 
-
-applay_list_of_rules_X_times(Words,0,_) -> Words;
-applay_list_of_rules_X_times(Words,IterationLeft,ListOfRules) -> 
-    NewWords = iterate_words(Words,ListOfRules),
-    NewWords ++ applay_list_of_rules_X_times(NewWords,IterationLeft - 1,ListOfRules).
+iterate_all_possible_rules(_,[]) -> [];
+iterate_all_possible_rules([],_) -> [];
+iterate_all_possible_rules(Word,ListOfRules) ->
+    [H|T] = ListOfRules,
+    AllWordPossibilities = list_com:list_devide_to_three(Word),
+    Pom = applay_single_rule_to_list_of_words(H,AllWordPossibilities) ,
+    Pom2 = iterate_all_possible_rules(Word,T),
+    list_com:list_remove_empty([Pom] ++ Pom2).
 
 iterate_words([],_) -> [];
-iterate_words([H|T],ListOfRules) -> applay_all_rules_from_list(H,ListOfRules) ++ iterate_words(T,ListOfRules).
+iterate_words(_,[]) -> [];
+iterate_words(Words,ListOfRules) ->
+    [HW|TW] = Words,
+    Pom = iterate_all_possible_rules(HW,ListOfRules),
+    list_com:list_remove_empty(Pom ++ iterate_words(TW,ListOfRules)).
 
-%słowo startowe to 0, a zmienne to kolejne liczby
-run(Iteracje,NrGramatyki) ->
-    applay_list_of_rules_X_times([[0]],Iteracje,gramatyka(NrGramatyki)).
+run(0,_,StartWords) -> StartWords;
+run(Iteration,NumerGramtyki,StartWords) -> 
+    NewWords = iterate_words(StartWords,gramatyki:gramatyka(NumerGramtyki)),
+    NewWords ++ run(Iteration - 1,NumerGramtyki,NewWords).
