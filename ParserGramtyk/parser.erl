@@ -45,7 +45,7 @@ run(Iteration,NumerGramtyki,StartWords) ->
     DupicatesRemoved ++ run(Iteration - 1,NumerGramtyki,DupicatesRemoved).
 
 
-go() -> wypisz(list_com:remove_duplicates(run(8,6,[[0]]))).
+go() -> wypisz(list_com:remove_duplicates(run(8,1,[[0]]))).
 
 wypisz([H|T]) -> io:fwrite("~p\n",[H]),wypisz(T); 
 wypisz([]) -> ok.
