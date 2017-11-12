@@ -32,7 +32,17 @@ rule(16,[c,c]) -> [b];
 rule(17,[b,c]) -> [c];
 rule(18,[c,b]) -> [c];
 
+%gramatyka dla języka palindromów nad alfabetem{a,b}
+rule(19,[0]) -> [a];
+rule(20,[0]) -> [b];
+rule(21,[0]) -> [a,0,a];
+rule(22,[0]) -> [b,0,b];
 
+%gramatyka E→E+E|E∗E|(E)|2
+rule(23,[e]) -> ["(",e,")"];
+rule(24,[e]) -> [e,"*",e];
+rule(25,[e]) -> [e,"+",e];
+rule(26,[e]) -> [2];
 
 rule(_RuleNumber,_Variable) -> removethislist.
 
@@ -46,6 +56,10 @@ gramatyka(3) -> [7,8,9];
 gramatyka(4) -> [10,11,12,13,14];
 %gramatyka gra w kule
 gramatyka(5) -> [15,16,17,18];
+%gramatyka dla języka palindromów nad alfabetem{a,b}
+gramatyka(6) -> [19,20,21,22];
+%gramatyka E→E+E|E∗E|(E)|2
+gramatyka(7) -> [23,24,25,26];
 
 
 gramatyka(_) -> io:fwrite("Ta grmatyka jeszcze nie istnieje\n").
