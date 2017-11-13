@@ -1,6 +1,6 @@
 -module(list_com).
 -compile([export_all,debug_info]).
--export([list_devide_to_three/1,list_remove_empty/1,remove_duplicates/1]).
+-export([list_devide_to_three/1,list_remove_empty/1,remove_duplicates/1,is_one_of/2]).
 
 list_devide(0,_) -> [];
 list_devide(N,List) -> [lists:split(N - 1,List)] ++ list_devide(N - 1,List).
@@ -30,3 +30,15 @@ list_remove_empty([H|T]) when H =/= [] -> [H] ++ list_remove_empty(T).
 remove_duplicates(List) ->
         Set = sets:from_list(List),
         sets:to_list(Set).
+
+compere_two_lists([],[]) -> true;
+compere_two_lists([],_) -> false;
+compere_two_lists(_,[]) -> false;
+compere_two_lists([H1|T1],[H2|T2]) ->
+    case H1 =:= H2 of
+        true ->  compere_two_lists(T1,T2);
+        false -> false
+    end.
+
+is_one_of(_,[]) -> false;
+is_one_of(L,[H|T]) -> compere_two_lists(L,H) or is_one_of(L,T). 
