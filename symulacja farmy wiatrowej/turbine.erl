@@ -32,12 +32,6 @@ get_accual_power(State,WindSpeed,TurbineArea,AirDencity,Efficiency) ->
     TurbinePower = get_teoretical_power(State,WindSpeed,TurbineArea,AirDencity),
     TurbinePower * Efficiency / 100.
 
-%TODO implement repering model: reparing teams aviability, 
-try_to_repair() -> io:fwrite("The turbine is not working, we are fixing it.\n").
-
-%TODO extend mplementation: add some propability,...
-random_event() -> working.
-
 run(State,Radius,Efficiency) ->
     AirTemperature = get_air_temperature(airtempfile),
     AirDencity = get_air_density(AirTemperature),
