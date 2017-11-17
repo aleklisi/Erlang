@@ -24,6 +24,7 @@ deploy_symulation(NumberOfWindTurbines,StepsLeft,TurbineParameters) ->
 
 run(0,PlantPID,TurbinesPIDs) -> 
     PlantPID ! endOfSymulation,
+    %TODO fix it in another way
     timer:sleep(1000),
     send_to_all_from_list(TurbinesPIDs,endOfSymulation);
 run(StepsLeft,PlantPID,TurbinesPIDs) ->
