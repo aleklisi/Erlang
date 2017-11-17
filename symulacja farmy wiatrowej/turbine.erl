@@ -47,10 +47,13 @@ run(State,Radius,Efficiency) ->
 
 turbine(State,Radius,Efficiency,PowerPlantPID) ->
     receive
-   {newState,NewState} -> 
-        turbine(NewState,Radius,Efficiency,PowerPlantPID);
-   sendPowerToPlant -> 
-        Power = run(State,Radius,Efficiency),
-        PowerPlantPID ! Power;
-    endOfSymulation -> exit("End of Symulation")
-end.
+        {newState,NewState} -> 
+            turbine(NewState,Radius,Efficiency,PowerPlantPID);
+        {sendPowerToPlant,Step} -> 
+            Power = run(State,Radius,Efficiency),
+            PowerPlantPID ! {Power,self(),Step};
+        endOfSymulation ->
+            exit("End of Symulation");
+        _ -> ok
+    end,
+    turbine(State,Radius,Efficiency,PowerPlantPID).
