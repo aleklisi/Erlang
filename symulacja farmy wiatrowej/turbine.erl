@@ -42,12 +42,16 @@ run(State,Radius,Efficiency) ->
 turbine(State,Radius,Efficiency,PowerPlantPID) ->
     receive
         {newState,NewState} -> 
+            io:fwrite("Turbine ~p changed state from ~p to ~p\n",[self(),State,NewState]),
             turbine(NewState,Radius,Efficiency,PowerPlantPID);
-        {sendPowerToPlant,Step} -> 
+        {sendPowerToPlant,StatisticsCollector,Step} -> 
             Power = run(State,Radius,Efficiency),
-            PowerPlantPID ! {Power,self(),Step};
+            io:fwrite("Turbine ~p sends ~p of Power to ~p in Step ~p\n",[self(),Power,PowerPlantPID,Step]),            
+            StatisticsCollector ! {Power,self(),Step};
         endOfSymulation ->
-            exit("End of Symulation");
-        _ -> ok
+            io:fwrite("Turbine ~p ends symulation\n",[self()]),
+            exit("End of Symulation\n");
+        Message -> 
+            io:fwrite("Turbine ~p SPAM ~p\n",[self(),Message])
     end,
     turbine(State,Radius,Efficiency,PowerPlantPID).
