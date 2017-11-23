@@ -33,4 +33,4 @@ run(StepsLeft,PlantPID,TurbinesPIDs) ->
     run(StepsLeft - 1, PlantPID,TurbinesPIDs).
 
 
-example_run() -> deploy_symulation(3,3,{working,1,5}).
+example_run() -> deploy_symulation(10,10,{working,1,5}).
