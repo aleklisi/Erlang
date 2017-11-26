@@ -38,7 +38,7 @@ run_plant(WindTurbinesPIDs) ->
         {sumedPower, Step, Sum} -> 
             io:fwrite("Plant ~p: power gothered form all turbines in step ~p is ~p\n",[self(),Step,Sum]); 
         endOfSymulation ->
-            io:fwrite("Plant ~p End of Symulation\n",[self()]),
+            io:fwrite("Plant: End of Symulation ~p\n",[self()]),
             exit("End of Symulation\n");
         _ -> 
             io:fwrite("Plant ~p SPAM\n",[self()])

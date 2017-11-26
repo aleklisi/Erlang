@@ -2,35 +2,37 @@
 -compile([export_all,debug_info]).
 -import(turbine,[turbine/4]).
 -import(plant,[start/0,send_to_all_from_list/2]).
+-import(weather,[weather_module_start/3]).
 
-deploy_turbine(TurbineParameters) ->
+deploy_turbine(TurbineParameters,WeatherModulePID) ->
     {State,Radius,Efficiency,PowerPlantPID} = TurbineParameters,
-    NewTurbinePID = spawn(turbine,turbine,[State,Radius,Efficiency,PowerPlantPID]),
+    NewTurbinePID = spawn(turbine,turbine,[State,Radius,Efficiency,PowerPlantPID,WeatherModulePID]),
     io:fwrite("Deploy ~p new turbine ~p was created\n", [self(),NewTurbinePID]),
     NewTurbinePID.
 
-deploy_multiple_turbines(_,0) -> [];
-deploy_multiple_turbines(TurbineParameters,N) -> 
-    [deploy_turbine(TurbineParameters)] ++ deploy_multiple_turbines(TurbineParameters,N - 1).
+deploy_multiple_turbines(_,_,0) -> [];
+deploy_multiple_turbines(TurbineParameters,WeatherModulePID,N) -> 
+    [deploy_turbine(TurbineParameters,WeatherModulePID)] ++ deploy_multiple_turbines(TurbineParameters,WeatherModulePID,N - 1).
 
 
-deploy_symulation(NumberOfWindTurbines,StepsLeft,TurbineParameters) ->
+deploy_symulation(NumberOfWindTurbines,StepsLeft,TurbineParameters,TimeLimitInSeconds) ->
+    WeatherModulePID = weather_module_start("airSpeed.txt","windiness.txt","airTemp.txt"),
     {State,Radius,Efficiency} = TurbineParameters,
     PlantPID = spawn(plant,start,[]),
     io:fwrite("Deploy ~p new plant ~p was created\n",[self(),PlantPID]),
-    TurbinesPIDs = deploy_multiple_turbines({State,Radius,Efficiency,PlantPID},NumberOfWindTurbines),
+    TurbinesPIDs = deploy_multiple_turbines({State,Radius,Efficiency,PlantPID},WeatherModulePID,NumberOfWindTurbines),
     PlantPID ! {windTurbinePIDs,TurbinesPIDs},
-    run(StepsLeft,PlantPID,TurbinesPIDs).
+    run(StepsLeft,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID).
 
-run(0,PlantPID,TurbinesPIDs) -> 
+run(0,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID) -> 
+    timer:sleep(TimeLimitInSeconds * 1000),
     PlantPID ! endOfSymulation,
-    %TODO fix it in another way
-    timer:sleep(1000),
+    WeatherModulePID ! endOfSymulation,
     send_to_all_from_list(TurbinesPIDs,endOfSymulation);
-run(StepsLeft,PlantPID,TurbinesPIDs) ->
+run(StepsLeft,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID) ->
     Message = {getPowerFromTurbines,StepsLeft},
     PlantPID ! Message,
-    run(StepsLeft - 1, PlantPID,TurbinesPIDs).
+    run(StepsLeft - 1,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(10,10,{working,1,5}).
+example_run() -> deploy_symulation(2,20,{working,1,5},2).

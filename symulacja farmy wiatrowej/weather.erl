@@ -1,9 +1,6 @@
 -module(weather).
 -compile([export_all,debug_info]).
 
-%TODO add accual implemantation
-read_data_from_file(_FileName) -> [4,5,4,6,7].
-
 add_randomness_element(Range) -> 
     {Min,Max} = Range,
     Diff = Max - Min,
@@ -32,17 +29,68 @@ air_density_table(_)-> 1.4224.
 get_air_density(AirTemperature) ->
     Pom = AirTemperature + add_randomness_element({-4,4}),
     air_density_table(Pom).
-%TODO add real data input from file 
+
 %Windiness[%], result in [m/s]
-get_wind_speed(_FileName) -> 
-    Windiness = get_windiness(tODO),
-    WindSpeed = 10,
+get_wind_speed(WeatherModulePID) -> 
+    Windiness = get_windiness(WeatherModulePID),
+    WindSpeed = get_windspeed(WeatherModulePID),
     Diff = WindSpeed * Windiness / 100,
     no_less_then_zero(WindSpeed + add_randomness_element({-Diff, Diff})).
 
-get_windiness(_FileName) -> 10.
+%result in [m/s]
+get_windspeed(WeatherModulePID) -> 
+    WeatherModulePID ! {getWindSpeed, self()},
+    loop(windSpeedIs).
 
-%TODO add real data input from file 
+%result in [%]
+get_windiness(WeatherModulePID) -> 
+    WeatherModulePID ! {getWindiness, self()},
+    loop(windinessIs).
+
 %result in [C]
-get_air_temperature(_FileName) -> 20.
+get_air_temperature(WeatherModulePID) -> 
+    WeatherModulePID ! {getAirTemperature, self()},
+    loop(airTemperatureIs).
 
+loop(MessageFlag) ->
+    receive
+        {MessageFlag,Value} -> Value
+    end.
+
+weather_module_start(WindSpeedFile,WindinessFile,AirTemperatureFile) -> 
+    WindSpeed = readfile(WindSpeedFile,"\r\n"),
+    Windiness = readfile(WindinessFile,"\r\n"),
+    AirTemperature = readfile(AirTemperatureFile,"\r\n"),
+    %io:fwrite("WindSpeed: ~p\n",[WindSpeed]),
+    %io:fwrite("Windiness: ~p\n",[Windiness]),
+    %io:fwrite("AirTemperature: ~p\n",[AirTemperature]),
+    spawn(weather,weather_module,[WindSpeed,Windiness,AirTemperature]).
+
+weather_module(WindSpeed,Windiness,AirTemperature) ->
+    [HSpeed|TSpeed] = WindSpeed,
+    [HWindiness|TWindiness] = Windiness,
+    [HTemp|TTemp] = AirTemperature,
+    receive
+        {getWindSpeed, PID} -> 
+            PID ! {windSpeedIs,HSpeed},
+            %io:fwrite("weather module ~p\n",[{getWindSpeed, PID}]), 
+            weather_module(TSpeed ++ [HSpeed],Windiness,AirTemperature);
+        {getWindiness, PID} -> 
+            PID ! {windinessIs,HWindiness},
+            %io:fwrite("weather module ~p\n",[{getWindiness, PID}]),    
+            weather_module(WindSpeed,TWindiness ++ [HWindiness],AirTemperature);
+        {getAirTemperature, PID} -> 
+            PID ! {airTemperatureIs, HTemp},
+            %io:fwrite("weather module ~p\n",[{getAirTemperature, PID}]),                         
+            weather_module(WindSpeed,Windiness,TTemp ++ [HTemp]);
+        endOfSymulation -> io:fwrite("Weather module: End of Symulation ~p\n",[self()]);
+        SPAM -> io:fwrite("Weather module spam in ~p messqge: ~p\n", [self(),SPAM])
+    end.
+
+readfile(FileName,Separator) ->
+    {ok, Binary} = file:read_file(FileName),
+    List = string:tokens(erlang:binary_to_list(Binary),Separator),
+    ListPom = lists:seq(1,length(List)),
+    ReadInList = lists:zipwith(fun(X,_) -> string:to_float(X) end,List,ListPom),
+    {Floats,_} = lists:unzip(ReadInList),
+    Floats.
