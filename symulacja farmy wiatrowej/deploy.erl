@@ -30,9 +30,11 @@ run(0,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID) ->
     WeatherModulePID ! endOfSymulation,
     send_to_all_from_list(TurbinesPIDs,endOfSymulation);
 run(StepsLeft,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID) ->
+    timer:sleep(200),
+    io:fwrite("Step ~p started\n",[StepsLeft]),
     Message = {getPowerFromTurbines,StepsLeft},
     PlantPID ! Message,
     run(StepsLeft - 1,TimeLimitInSeconds,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(2,20,{working,1,5},2).
+example_run() -> deploy_symulation(2,2,{working,1,5},2).
