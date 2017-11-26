@@ -83,8 +83,10 @@ weather_module(WindSpeed,Windiness,AirTemperature) ->
             PID ! {airTemperatureIs, HTemp},
             %io:fwrite("weather module ~p\n",[{getAirTemperature, PID}]),                         
             weather_module(WindSpeed,Windiness,TTemp ++ [HTemp]);
-        endOfSymulation -> io:fwrite("Weather module: End of Symulation ~p\n",[self()]);
-        SPAM -> io:fwrite("Weather module spam in ~p messqge: ~p\n", [self(),SPAM])
+        endOfSymulation -> 
+            io:fwrite("Weather module: End of Symulation ~p\n",[self()]);
+        SPAM ->
+             io:fwrite("Weather module spam in ~p messqge: ~p\n", [self(),SPAM])
     end.
 
 readfile(FileName,Separator) ->

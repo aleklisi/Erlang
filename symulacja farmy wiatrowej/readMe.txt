@@ -7,6 +7,7 @@ c(turbine).
 c(weather).
 c(plant).
 c(deploy).
+c(exampleTurbine).
 
 deploy:example_run().
 
