@@ -7,7 +7,7 @@
 deploy_turbine(Model,TurbineParameters,WeatherModulePID) ->
     {State,Radius,Efficiency,PowerPlantPID} = TurbineParameters,
     NewTurbinePID = spawn(turbine,turbine,[Model,State,Radius,Efficiency,PowerPlantPID,WeatherModulePID]),
-    io:fwrite("Deploy ~p new turbine ~p was created\n", [self(),NewTurbinePID]),
+    io:fwrite("Deploy ~p new turbine ~p model ~p was created\n", [self(),NewTurbinePID,Model]),
     NewTurbinePID.
 
 deploy_multiple_turbines(_,_,0,_) -> [];
@@ -37,4 +37,4 @@ run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID) ->
     run(StepsLeft - 1,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(2,2,{working,1,5},"theoreticalTurbine").
+example_run() -> deploy_symulation(20,1,{working,1,5},"theoreticalTurbine").

@@ -5,8 +5,10 @@
 -import(theoreticalTurbine,[run/4]).
 
 %TODO add implementation of real turbine 
-run("Endurance E-4160 Wind Turbine",State,_,_,WeatherModulePID) -> exampleTurbine:run(State,WeatherModulePID);
-run("theoreticalTurbine",State,Radius,Efficiency,WeatherModulePID) -> theoreticalTurbine:run(State,Radius,Efficiency,WeatherModulePID);
+run("Endurance E-4160 Wind Turbine",State,_,_,WeatherModulePID) -> 
+    exampleTurbine:run(State,WeatherModulePID);
+run("theoreticalTurbine",State,Radius,Efficiency,WeatherModulePID) -> 
+    theoreticalTurbine:run(State,Radius,Efficiency,WeatherModulePID);
 run(_,_,_,_,_) -> erlang:error("model of your Turbine is not implemented yet/n").
 
 
