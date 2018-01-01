@@ -9,6 +9,7 @@ cabal-dev
 *.pdf
 *.dyn_hi
 .hpc
+*.csv
 *.beam
 .hsenv
 .cabal-sandbox/
