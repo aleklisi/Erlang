@@ -1,5 +1,6 @@
 %Starting work instructions:
 %Change directory to:
+cd("C:/Users/Admin/Documents/GitHub/Erlang/symulacja farmy wiatrowej").
 cd("C:/Users/sebac/Documents/Erlang/Programs/Erlang/symulacja farmy wiatrowej").
 %complie everything
 c(turbine).
