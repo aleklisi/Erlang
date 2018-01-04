@@ -37,4 +37,4 @@ run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID) ->
     run(StepsLeft - 1,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(20,1,{working,1,5},"theoreticalTurbine").
+example_run() -> deploy_symulation(20,1,{working,1,5},"Endurance E-4160 Wind Turbine").

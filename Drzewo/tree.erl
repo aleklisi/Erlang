@@ -1,6 +1,6 @@
 -module(tree).
 -compile([export_all]).
-
+%cd("C:/Users/sebac/Documents/Erlang/Programs/Erlang/Drzewo").
 %Napisz moduł drzewa binarnego zawierający następujące funkcje:
 %generacja losowego drzewa (liczby)
 get_list_of_random_numbers() -> [rand:uniform(20) || _ <- lists:seq(1,5)].
@@ -46,3 +46,7 @@ search_e(_,{tree,empty}) -> not_found;
 search_e(Elem, {tree,Elem,_,_}) -> throw(found);
 search_e(Elem, {tree,_,Left,Right}) -> 	search_e(Elem,Left),
 	search_e(Elem,Right).
+
+tree_sort(List) -> 
+	Tree = insert_from_list(List,{tree,empty}),
+	to_list_rnl(Tree).
