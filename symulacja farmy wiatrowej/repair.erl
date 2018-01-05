@@ -23,6 +23,7 @@ repair_teams_destribiutor(RepairTeams,TurbinesToRepair) ->
 
 try_fixing(RepairTeams,TurbinesToRepair) -> 
     NumberOfTeams = length(RepairTeams),
+    ok.
     
 
 repair_team(State) ->

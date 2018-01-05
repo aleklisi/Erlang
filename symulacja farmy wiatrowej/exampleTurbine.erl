@@ -3,7 +3,6 @@
 -import(weather,[get_wind_speed/1]).
 
 %data form  https://rf2.tthtesting.co.uk/windpower/wind-turbines/endurance-e-4660-85-kw-wind-turbine/
-%
 %by reimplemeting powertable one can validate real models :D
 power_table() -> 
     [

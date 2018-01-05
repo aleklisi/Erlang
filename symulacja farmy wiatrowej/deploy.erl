@@ -12,7 +12,8 @@ deploy_turbine(Model,TurbineParameters,WeatherModulePID) ->
 
 deploy_multiple_turbines(_,_,0,_) -> [];
 deploy_multiple_turbines(TurbineParameters,WeatherModulePID,N,Model) -> 
-    [deploy_turbine(Model,TurbineParameters,WeatherModulePID)] ++ deploy_multiple_turbines(TurbineParameters,WeatherModulePID,N - 1,Model).
+    [deploy_turbine(Model,TurbineParameters,WeatherModulePID)] ++ 
+        deploy_multiple_turbines(TurbineParameters,WeatherModulePID,N - 1,Model).
 
 
 deploy_symulation(NumberOfWindTurbines,StepsLeft,TurbineParameters,ModelOfTurbine) ->
@@ -25,7 +26,7 @@ deploy_symulation(NumberOfWindTurbines,StepsLeft,TurbineParameters,ModelOfTurbin
     run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 run(0,PlantPID,TurbinesPIDs,WeatherModulePID) -> 
-    timer:sleep(200),
+    timer:sleep(5),
     PlantPID ! endOfSymulation,
     WeatherModulePID ! endOfSymulation,
     send_to_all_from_list(TurbinesPIDs,endOfSymulation);
@@ -37,4 +38,4 @@ run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID) ->
     run(StepsLeft - 1,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(20,1,{working,1,5},"Endurance E-4160 Wind Turbine").
+example_run() -> deploy_symulation(10,10,{working,1,5},"Endurance E-4160 Wind Turbine").
