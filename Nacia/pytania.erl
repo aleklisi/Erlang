@@ -116,4 +116,84 @@ gather_all(PIDs,Results) ->
 %Napisz kod który zwróci najmniejszy element listy.
 
 smallest(List) -> lists:min(List).
+%definicja odpowienika kropki w haskellu
+% DOT = fun(A,B) -> fun(X) -> A(B(X)) end end.
     
+%Stwórz mape a => 1, b => 2, c => 3
+map() -> #{a=>1,b=>2,c=>3}.
+
+%lists:foldl(fun(X,Prod) -> {A,B} = X, Prod ++ [A,B] end, [],L5).
+
+myFold([]) -> [];
+myFold([{A,B}|T]) ->
+    [A, B] ++ myFold(T). 
+
+%<text>napisz funkcje my_receive która nie przyjmuje argumantu ale odbiera wioadomosc i jesli jest to atom pom to zwraca pom, jesli otrzyma cololwiek innego zwraca ok , jesli nie otrzyma nic przez 200 milisekund od uruchomienia zwraca atom timeout
+
+my_receive() -> 
+    receive 
+        pom -> pom;
+        _ -> ok
+    after   
+        200 -> timeout
+    end.
+
+% a < fun(X) -> X end. co sie wypisze ? true
+
+% <text>napisz funkcje f która przyjmuje 1 argumant i zwraca a jesli argument jest mniejszy lub równy od 10, b jelsi argument jest w przedziale od 10 do 20,w kazdym inny przypadku zwrac c
+
+myRet(A) when A =< 10 -> a;
+myRet(A) when A < 20 -> b;
+myRet(_) -> c.
+
+%<text>napisz kod zwracający 2 elementowa krotkę skłądajacą sie z atomu a i liczy 5.
+
+myKrotka() -> {a,5}.
+
+%podaj przykład zachowania (behaviour) OTP 
+%Odpowiedź przykładowa 1:
+			%gen_server
+	%Odpowiedź przykładowa 2:
+			%gen_event
+	%Odpowiedź przykładowa 3:
+	%	supervisor
+
+%% max listy
+myMax(L) -> lists:max(L).
+
+maxx(A,B) when A>=B -> A;
+maxx(_,B) -> B.
+
+
+% foldl(funckja dwuarg X(z listy) i Prod(pocztakowy), Prod, Lista)
+myMax2([H|T]) -> lists:foldl(fun maxx/2, H, T).
+
+%<text>Napisz program zwracający krotkę 2-elementową z najmniejszym i największym elementem listy (tmin\_max/1).
+minMax([]) -> erlang:error("List is empty");
+minMax([H|T]) -> {lists:foldl(fun(X, Prod) -> 
+    case X < Prod of
+         true -> X;
+         false -> Prod
+    end end , H, T), lists:foldl(fun maxx/2, H, T)}.
+
+    %<text>Napisz program, który dla danego N zwróci listę formatu [N,N-1,…,2,1]
+
+myList(N) when N < 0 -> erlang:error("N is negative");
+myList(0) -> [];
+myList(N) -> [N] ++ myList(N-1).
+
+%lists:reverse(lists:seq(1,N)).
+
+%<text>Napisz program generujący listę jedynek o zadanej długości.
+
+generate(N) -> [1 || _ <- lists:seq(1,N)].
+
+%<text>Napisz program generujący listę o podanej długości składającą się z podanego elementu.
+
+generate2(Elem,N) -> [Elem || _ <- lists:seq(1,N)].
+
+%<text>Zdefiniuj stałą dla całego modułu TIMOUT na wartosc 200
+-define(TIMEOUT, 200).
+
+time() -> ?TIMEOUT.
+
