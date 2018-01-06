@@ -3,7 +3,7 @@
 cd("C:/Users/Admin/Documents/GitHub/Erlang/symulacja farmy wiatrowej").
 cd("C:/Users/sebac/Documents/Erlang/Programs/Erlang/symulacja farmy wiatrowej").
 c(turbine).
-c(repair).
+%c(repair).
 c(weather).
 c(plant).
 c(deploy).

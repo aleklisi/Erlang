@@ -1,6 +1,5 @@
 -module(exampleTurbine).
 -compile([export_all,debug_info]).
--import(weather,[get_wind_speed/1]).
 
 %data form  https://rf2.tthtesting.co.uk/windpower/wind-turbines/endurance-e-4660-85-kw-wind-turbine/
 %by reimplemeting powertable one can validate real models :D
@@ -33,8 +32,8 @@ get_power(WindSpeed) ->
     PowerTable = power_table(),
     find_division(PowerTable,WindSpeed).
 
-run(working,WeatherModulePID) ->
+run(working,WeatherModulePID,Timebase) ->
     WindSpeed = weather:get_wind_speed(WeatherModulePID),
-    get_power(WindSpeed);
-run(nonotworking,_) -> 0;
-run(_,_) ->  erlang:error("Wind turbine rached unreachable state!!!\n").
+    Timebase * get_power(WindSpeed);
+run(nonotworking,_,_) -> 0;
+run(_,_,_) ->  erlang:error("Wind turbine rached unreachable state!!!\n").

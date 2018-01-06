@@ -25,22 +25,25 @@ start() ->
     receive
     {windTurbinePIDs,WindTurbinesPIDs} -> 
         io:fwrite("Plant ~p starts working\n",[self()]),
-        run_plant(WindTurbinesPIDs);
+        run_plant(WindTurbinesPIDs,0);
     Message -> 
-        io:fwrite("Plant ~p start SPAM ~p\n", [self(),Message])
+        io:fwrite("Plant ~p SPAM ~p\n", [self(),Message])
     end.
 
-run_plant(WindTurbinesPIDs) ->
+run_plant(WindTurbinesPIDs,ToalPowerGothered) ->
     receive
         {getPowerFromTurbines,Step} -> 
             spawn(plant,gother_power,[WindTurbinesPIDs,self(),Step]),
             io:fwrite("Send PlantPower to statistic saving.\n");
-        {sumedPower, Step, Sum} -> 
-            io:fwrite("Plant ~p: power gothered form all turbines in step ~p is ~p\n",[self(),Step,Sum]); 
+        {sumedPower, Step, Sum} ->  
+            io:fwrite("Plant ~p: power gothered form all turbines in step ~p is ~p kWh\n",[self(),Step,Sum]),
+            run_plant(WindTurbinesPIDs,ToalPowerGothered + Sum);
         endOfSymulation ->
+            io:fwrite("Plant: Power gothered form all turbines in all steps is ~p kWh\n",[ToalPowerGothered]),
             io:fwrite("Plant: End of Symulation ~p\n",[self()]),
             exit("End of Symulation\n");
         _ -> 
             io:fwrite("Plant ~p SPAM\n",[self()])
     end,
-    run_plant(WindTurbinesPIDs).
+    run_plant(WindTurbinesPIDs,ToalPowerGothered).
+ 
