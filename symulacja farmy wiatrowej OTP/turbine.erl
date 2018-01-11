@@ -1,16 +1,13 @@
 -module(turbine).
 -author('AlekLisiecki').
 -behaviour(gen_server).
--export([start_link/1, stop/1, stop/0, get_power/1, get_state/1, change_state/2,start_link/0]).
+-export([start_link/1, stop/1, get_power/1]).
 -export([init/1, handle_call/3, handle_cast/2, handle_info/2, terminate/2, code_change/3]).
 
-%%====================================================================
-%% API
+%-export([stop/0,get_state/1, change_state/2,start_link/0]).
 %%====================================================================
 
-start_link() -> gen_server:start_link({local,turbine}, ?MODULE, [], []).
 
-stop() -> gen_server:stop(turbine).
 
 start_link(ServerName) -> gen_server:start_link({local, ServerName}, ?MODULE, [ServerName], []).
 
@@ -18,12 +15,17 @@ stop(ServerName) -> gen_server:stop(ServerName).
 
 get_power(ServerName) -> gen_server:call(ServerName, get_power).
 
-get_state(ServerName) -> gen_server:call(ServerName, get_state).
-
-change_state(NewState, ServerName) -> gen_server:call(ServerName, {change_state,NewState}).
 
 %%====================================================================
-%% gen_server callbacks
+%currently unused
+%start_link() -> gen_server:start_link({local,turbine}, ?MODULE, [], []).
+
+%stop() -> gen_server:stop(turbine).
+
+%get_state(ServerName) -> gen_server:call(ServerName, get_state).
+
+%change_state(NewState, ServerName) -> gen_server:call(ServerName, {change_state,NewState}).
+
 %%====================================================================
 
 init([]) ->

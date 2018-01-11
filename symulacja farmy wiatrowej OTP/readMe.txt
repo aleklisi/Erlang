@@ -4,3 +4,4 @@ c(mainRuller,[debug_info]).
 c(exampleTurbine,[debug_info]).
 c(fileOps,[debug_info]).
 c(plant,[debug_info]).
+mainRuller:run_simulation(3,3).

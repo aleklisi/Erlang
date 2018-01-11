@@ -22,7 +22,7 @@ run_simulation(NumberOfTurbines,NumberOfSteps) ->
         loop(NumberOfSteps, Turbines),
         stop(Turbines)
     catch
-        _:_ -> error
+        _:_ -> error_executing_simulation
     end.
 
 %==============================================================
