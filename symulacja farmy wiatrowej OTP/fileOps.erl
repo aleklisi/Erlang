@@ -7,7 +7,7 @@ read_file(FileName,Separator) ->
         {ok, Binary} = file:read_file(FileName),
         file_to_list_of_floats(Binary,Separator)        
     catch
-        _:_ -> erlang:error("Something went wrong with file opening.")
+        _:_ -> erlang:error("File opening went wrong. Problaby you try to open not existing file.")
     end.
 
 file_to_list_of_floats(Binary,Separator) ->
