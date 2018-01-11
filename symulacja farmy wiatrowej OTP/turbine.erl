@@ -33,11 +33,10 @@ init([]) ->
     {ok, {working,[8.0]}};
 
 init([ServerName]) ->
-    FileName = atom_to_list(ServerName) ++ ".txt",
+    FileName = "inputData/" ++ atom_to_list(ServerName) ++ ".txt",
     WindsList = fileOps:read_file(FileName,"\r\n"),
     io:fwrite("Turbine ~p started!!!\n",[ServerName]),
     {ok, {working,WindsList}}.
-
 
 handle_call(get_power,_From,State) ->
     {TurbineState,[H|T]} = State,
