@@ -91,7 +91,12 @@ sum3()->pomSum(100).
 my_map([], _) -> [];
 my_map([H|T], F) -> [F(H)] ++ my_map(T,F).
 
-thread(X,Fun,ParrentPID) -> ParrentPID ! {self(),Fun(X)}.
+thread(X,Fun,ParrentPID) -> 
+    try
+        ParrentPID ! {self(),Fun(X)}
+    catch
+        _:_ -> ParrentPID ! {self(),execution_error}
+    end.
 
 mapPIDS([],_) -> [];
 mapPIDS([H|T],Fun) -> [spawn(pytania, thread, [H, Fun, self()])] ++ mapPIDS(T,Fun).
@@ -104,7 +109,7 @@ gather1(PID) ->
     receive 
         {PID, Result} -> Result
     after 
-        3000 -> error
+        3000 -> timeout_error
     end.
 
 gather_all([],Results) -> Results;
@@ -196,4 +201,10 @@ generate2(Elem,N) -> [Elem || _ <- lists:seq(1,N)].
 -define(TIMEOUT, 200).
 
 time() -> ?TIMEOUT.
+
+ start() -> 
+   gen_smtp_client:send({"kotosusel@gmail.com", ["alek.lisiecki@gmail.com"], "Subject: testing"},
+   
+   [{relay, "smtp.gmail.com"}, {ssl, true}, {username, "kotosusel@gmail.com"}, 
+      {password, "Developer123"}]).
 

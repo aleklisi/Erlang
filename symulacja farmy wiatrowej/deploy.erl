@@ -1,5 +1,8 @@
 -module(deploy).
 -compile([export_all,debug_info]).
+-import(weather,[weather_module_start/3]).
+-import(plant,[send_to_all_from_list/2]).
+
 
 deploy_turbine(Model,TurbineParameters,WeatherModulePID) ->
     {State,Radius,Efficiency,PowerPlantPID,Timebase} = TurbineParameters,
@@ -36,4 +39,4 @@ run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID) ->
     run(StepsLeft - 1,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(10,10,{working,1,5},"Endurance E-4160 Wind Turbine",1).
+example_run() -> deploy_symulation(30000,5,{working,1,5},"Endurance E-4160 Wind Turbine",1).
