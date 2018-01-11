@@ -44,13 +44,13 @@ handle_call(get_power,_From,State) ->
     Reply = exampleTurbine:run(TurbineState,H),
     {reply, Reply,{working, T ++ [H]}};
     
-handle_call(get_state,_From,State) ->
-    Reply = State,
-    {reply, Reply, State};
+%handle_call(get_state,_From,State) ->
+%    Reply = State,
+%    {reply, Reply, State};
     
-handle_call({change_state,NewState},_From,_State) ->
-    Reply = ok,
-    {reply, Reply, NewState};
+%handle_call({change_state,NewState},_From,_State) ->
+%    Reply = ok,
+%    {reply, Reply, NewState};
     
 handle_call(_Request, _From, State) ->
     io:fwrite("handle_call!!!\n",[]),  
