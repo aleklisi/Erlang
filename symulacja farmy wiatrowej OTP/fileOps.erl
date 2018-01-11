@@ -1,9 +1,16 @@
 -module(fileOps).
 -author('AlekLisiecki').
--export([read_file/2]).
+-export([read_file/2, file_to_list_of_floats/2]).
 
 read_file(FileName,Separator) ->
-    {ok, Binary} = file:read_file(FileName),
+    try
+        {ok, Binary} = file:read_file(FileName),
+        file_to_list_of_floats(Binary,Separator)        
+    catch
+        _:_ -> erlang:error("Something went wrong with file opening.")
+    end.
+
+file_to_list_of_floats(Binary,Separator) ->
     List = string:tokens(erlang:binary_to_list(Binary),Separator),
     ListPom = lists:seq(1,length(List)),
     ReadInList = lists:zipwith(fun(X,_) -> string:to_float(X) end,List,ListPom),

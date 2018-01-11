@@ -20,9 +20,9 @@ run_simulation(NumberOfTurbines,NumberOfSteps) ->
         start(a,NumberOfTurbines),
         Turbines = create_turbine_names(NumberOfTurbines),
         loop(NumberOfSteps, Turbines),
-        stop(Turbines)
+        stop(Turbines).
     catch
-        _:_ -> error_executing_simulation
+        _:_ -> {error,"catch caught error during simulation"}
     end.
 
 %==============================================================
