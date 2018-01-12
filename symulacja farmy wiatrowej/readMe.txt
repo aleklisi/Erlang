@@ -1,13 +1,12 @@
 %Starting work instructions:
 %Change directory to:
-cd("C:/Users/Admin/Documents/GitHub/Erlang/symulacja farmy wiatrowej").
 cd("C:/Users/sebac/Documents/Erlang/Programs/Erlang/symulacja farmy wiatrowej").
-c(turbine).
-c(repair).
-c(weather).
-c(plant).
-c(deploy).
-c(exampleTurbine).
-c(theoreticalTurbine).
+c(turbine,[debug_info]).
+%c(repair,[debug_info]).
+c(weather,[debug_info]).
+c(plant,[debug_info]).
+c(deploy,[debug_info]).
+c(exampleTurbine,[debug_info]).
+c(theoreticalTurbine,[debug_info]).
 deploy:example_run().
 
