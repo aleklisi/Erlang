@@ -1,7 +1,6 @@
 -module(mainRuller).
--behaviour(application).
 -author('AlekLisiecki').
-
+-behaviour(application).
 -export([start/2, stop/1]).
 -export([run_simulation/2, loop/2, create_turbine_names/1, write_output/2]).
 

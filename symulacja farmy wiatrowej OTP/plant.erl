@@ -3,7 +3,6 @@
 -behaviour(supervisor).
 -export([create_turbine_name/1, start_link/1, create_wind_turbines/1]).
 -export([init/1]).
--compile([debug_info]).
 -define(SERVER, ?MODULE).
 
 start_link(NumberOfTurbines) when NumberOfTurbines > 0 ->

@@ -6,24 +6,16 @@
 
 %-export([stop/0,get_state/1, change_state/2,start_link/0]).
 %%====================================================================
-
-
-
 start_link(ServerName) -> gen_server:start_link({local, ServerName}, ?MODULE, [ServerName], []).
 
 stop(ServerName) -> gen_server:stop(ServerName).
 
 get_power(ServerName) -> gen_server:call(ServerName, get_power).
-
-
 %%====================================================================
 %currently unused
 %start_link() -> gen_server:start_link({local,turbine}, ?MODULE, [], []).
-
 %stop() -> gen_server:stop(turbine).
-
 %get_state(ServerName) -> gen_server:call(ServerName, get_state).
-
 %change_state(NewState, ServerName) -> gen_server:call(ServerName, {change_state,NewState}).
 
 %%====================================================================
