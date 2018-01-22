@@ -1,6 +1,5 @@
 -module(pytania).
--compile(export_all).
-%cd("C:/Users/sebac/Documents/Erlang/Programs/Erlang/Nacia").
+-compile([export_all]).
 
 %co zwroci ?? lists : any(fun(X)-> X > 3 end, [1, 2, 3, 4]). odp true
 
@@ -201,10 +200,3 @@ generate2(Elem,N) -> [Elem || _ <- lists:seq(1,N)].
 -define(TIMEOUT, 200).
 
 time() -> ?TIMEOUT.
-
- start() -> 
-   gen_smtp_client:send({"kotosusel@gmail.com", ["alek.lisiecki@gmail.com"], "Subject: testing"},
-   
-   [{relay, "smtp.gmail.com"}, {ssl, true}, {username, "kotosusel@gmail.com"}, 
-      {password, "Developer123"}]).
-
