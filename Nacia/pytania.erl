@@ -237,15 +237,76 @@ end Pol_Sec;
 
 Funkcja wyliczajaca silnie rekurencyjnie (ADA) dla blednych danych zglos wyjatek
 
-function Factorial (N : Integer) return Positive is
+function Factorial (N : Integer) return Integer is
 begin
-   exception
-   when N <= 0 => 
+   
+   if N <= 0 then
 	Put("The argument is negative !!");
-		
+end if;
+	    
    if N = 1 then
       return 1;
    else
       return (N * Factorial (N - 1));
    end if;
 end Factorial;
+	    
+Erlang mapa
+	    Map = #{a=>1, b=>2, c=>3}.
+
+Odwroc liste bez lists:reverse
+
+myReverse([],Result) -> Result;
+myReverse([H|T], Result) -> myReverse(T,[H]++Result).
+
+Program wyliczajacy trojki pitagoresjkie od 1..n
+wynik ma byc lista ktorek
+
+pyth(N) ->     [ {A,B,C} ||
+		A <- lists:seq(1,N),  
+		B <- lists:seq(1,N),  
+		C <- lists:seq(1,N),
+		A+B+C =< N,  
+		A*A+B*B == C*C      ].
+
+Operatora przypisania w ADZIE NIE MOZNA przeladowac
+
+ZADANIE SPORADYCZNE sluzy do reakcji na zdarzenia Asynchroniczne
+
+DOt. obiektow chronionych w Adzie:
+wywolanie procedury ob. chronionego powoduje reewaluacje dozorcow dla wejsc
+
+lists:zipWith(fun(X,Y) -> {X,Y} end, [1,2,3], [a,b,c]).
+[{1,a}, {2,b}, {3,c}].
+
+lists:foldl(fun(X,Sum) -> X-Sum end, 3, [X-1 || X <- lists:seq(1,5), X > 2]).
+Wynik to: 0
+explaination: 
+X = 2 Sum = 3 (2 -3 = -1)
+X = 3 Sum = -1 (3 - -1 = 3+1 = 4)
+X = 4 Sum = 4 (4-4 = 0)
+
+[X+Y || X <- [1,2], Y <- [2,3]].
+
+[3,4,4,5]
+
+Funkcja dzielaca liczby calkowite w Adzie. Jesli dzielnik == 0 to ma byc zglaszany wyjatek Zero z wiadomoscia "Nie dziel przez 0"
+with Ada.Text_IO;
+use Ada.Text_IO;
+
+procedure Hello is 
+	function Dzielenie(Dzielna: Integer; Dzielnik: Integer) return Integer is
+		begin
+			if Dzielnik = 0 then
+				   Put("Nie dziel przez 0 !");
+				   return 0;
+			end if;
+				    
+			return Dzielna/Dzielnik;
+		end Dzielnie;
+
+	begin
+		Put("Podziel: 3/3 & Dzielenie(3,3)");
+	end Hello;
+
+Napisz procedure w ktorej moze dojsc do zgloszenia wyjatku Name_Error wraz z przykkladowo obsluga
