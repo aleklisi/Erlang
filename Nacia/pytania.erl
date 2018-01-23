@@ -498,3 +498,338 @@ lamport(N) ->
 		{msg,T} when  T =< N ->  lamport(N+1) 
 	end.  
 
+ Napisz prosty serwer, który będzie zwracał wiadomość, jaką otrzymał od klienta (usługa “echo”). 
+Serwer ma przyjmować komunikaty od dowolnego procesu. 
+PID serwera przekazywany jest jako parametr.  
+
+-module(mod).
+-compile(export_all).   
+
+% -----  proces server  -------  
+loop() ->     
+	receive  
+		{req, From, Msg} ->           From ! {response, self(), Msg}    
+	end,      
+	loop().   
+
+% -------  funkcja klienta  -------- 
+% ServerPid :  pid procesu który odapala funkcję loop() - czyli naszego servera % Msg : treść wiadomości   
+client(ServerPid, Msg) ->     
+	ServerPid ! {req, self(), Msg},   
+	receive      
+		{response, ServerPid, Msg} ->     
+			io:format("Wiadomosc otrzymana z server: ~p ~n",[Msg])    
+	after 1000 -> {error}   
+	end.    
+% ------  funkcja tworząca proces servera  ------  
+start() ->   
+    spawn(mod, loop, []). 
+
+ Napisz program, który dla podanej listy procesów L roześle do każdego procesu z listy wiadomość “hello”.  
+
+func([]) ->   
+	{ok}; 
+func([H|T]) ->   
+	H!hello,    
+	func(T).   
+
+27. Napisz prostą bazę danych.
+Ma istnieć możliwość zapisu, usunięcia oraz odczytu wszystkich elementów.
+Baza ma działać jako oddzielny proces i ma zapisywać, usuwać elementy z wewnętrznej listy. 
+Do komunikacji z bazą używaj funkcji add/1, delete/1 oraz show/0.  
+
+-module(mod). 
+-compile(export_all).   
+% --- tworzy bazę + rejestruje nazwę celem łatwego dostępu do niej z innych funkcji  
+start() ->    register(database, spawn(mod, loop, [[]])).   
+% --- proces bazy danych ---- 
+% L : jest to lista do której będę dodawane/odejmowane elementy   
+loop(L) ->  
+	receive   
+		{add, Data} ->      
+			loop(L++[Data]);   
+		{delete, Data} ->        
+			loop(lists:delete(Data, L));    
+		{show} ->           io:format("~p ~n",[L]),   
+ 
+          loop(L)   
+	end.   
+
+%------ Obsługa bazy danych ---------  
+add(Data) -> 
+	database!{add, Data}.
+delete(Data) -> 
+	database!{delete, Data}. 
+show() -> 
+	database!{show}. 
+
+ Napisz program, który zwróci listę N procesów.  
+
+-module(mod).  
+ 
+-compile(export_all).   
+
+%---- tworzenie listy procesów ----- 
+func(N) -> [spawn(mod, loop, []) || _<-lists:seq(1,N)].  
+%------ funkcja procesu -----
+loop() ->     io:format("Pid ~p ~n",[self()]). 
+
+ Zaimplementuj algorytm sortowania QuickSort.  
+-module(mod). 
+-compile(export_all).  
+% tablica zero elementowa juz jest posorotwana
+qsort([]) -> []; 
+% tablica jedno elementowa już jest posortowana 
+qsort([H]) -> [H];
+
+qsort(L)  when length(L) > 1 ->    % wybor elementu który będzie pivotem    
+	PivotIndex = length(L) div 2,     
+	% pbranie wartości pivotu     
+	PivotElement = lists:nth(PivotIndex, L),  
+	% usunięcie wartości Pivota z listy    
+	NewList = lists:delete(PivotElement, L),  
+	% posegreguj elementy na liscie    
+	{Lmin, Lmax} = func(PivotElement, NewList),  
+	% wywolaj rekurencyjnie sortowanie na dwóch podtablicach. 
+	qsort(Lmin) ++ [PivotElement] ++ qsort(Lmax).  
+
+% funkcja pomocnicza : dzieli tablicę na dwie podtablice 
+func(N, L) -> func(N, L, [], []).  
+func(_N, [], Lmin, Lmax) -> 
+	{Lmin, Lmax}; 
+func(N, [H|T], Lmin, Lmax) when H < N -> 
+	func(N, T, [H|Lmin], Lmax); 
+func(N, [H|T], Lmin, Lmax) ->
+	func(N, T, Lmin, [H|Lmax]). 
+
+ Napisz funkcję, która usypia dany proces na X milisekund. Ma działać jak timer:sleep().  
+
+-module(mod).
+-compile(export_all).  
+
+sleep(N) ->  
+	receive    
+	after N ->          
+			ok    
+	end.
+
+ Napisz funkcję, która dla dwóch podanych list L1 i L2 (tej samej długości) połączy je tworząc nową listę.
+Każdy element w nowej liście ma być maksimum z wartości lokalnej w liście L1 i L2. 
+
+-module(mod). 
+-compile(export_all).  
+func([],[]) -> []; 
+func([H1|T1], [H2|T2]) ->   
+	if        H1 > H2  -> 
+			[H1 | func(T1, T2)];    
+		H1 =< H2 -> 
+			[H2 | func(T1, T2)]   
+	end.   
+
+ Napisz funkcję, która dla podanej listy L i indeksu Index zwróci nową listę, 
+	gdzie element pod wskazanym indeksem podwoi swoją wartość.  
+-module(mod). 
+-compile(export_all).  
+
+func(L, Index) ->  
+	NewValue = 2 * lists:nth(Index, L),   
+	lists:sublist(L, Index-1) ++ [NewValue] ++ lists:sublist(L, Index+1, length(L)). 
+
+ Napisz nieskończoną pętlę, która dla podanej listy L będzie wyświetlała każdy element w osobnym wierszu.  
+
+-module(mod).
+-compile(export_all).  
+
+func(L) -> func(L, L).  
+
+func([], L) ->     
+	func(L, L); 
+func([H|T], L) ->    
+	io:format("~p ~n",[H]),  
+    	timer:sleep(250),   
+	func(T, L).   
+
+Na podstawie danej listy L zrób nową listę niezawierającą liczb całkowitych.  
+
+-module(mod). 
+-compile(export_all). 
+
+func([]) -> []; 
+func([H|T]) when not is_integer(H) -> 
+	[H | func(T)]; 
+func([_|T]) -> func(T). 
+
+Napisz program, który dla zadanej listy L zwróci listę zawierającą tylko elementy parzyste z listy L.  
+
+-module(mod). 
+-compile(export_all).  
+
+func([]) -> []; 
+func([H|T]) when H rem 2 == 0 ->
+	[H | func(T)]; 
+func([_|T]) -> func(T). 
+
+Zbadaj, czy elementy danej listy składającej się z cyfr tworzą liczbę palindromiczną.  
+
+-module(mod).
+-compile(export_all).  
+
+func(L) -> 
+	func(L, lists:reverse(L)).
+
+func([],[]) -> 
+	{tak}; 
+func([H1|T1], [H2|T2]) when H1 == H2 -> 
+	func(T1, T2); 
+func(_, _) -> {nie}. 
+
+Napisz funkcję factorial(N), która obliczy silnię z liczby N.  
+
+-module(mod).
+-compile(export_all).
+
+factorial(0) -> 
+	1; 
+factorial(N) -> 
+	N * factorial(N-1).   
+
+14. Wypisz N kolejnych liczb trójkątnych.  
+-module(mod). 
+-compile(export_all).  
+
+func(1) -> 
+	[1]; 
+func(N) -> 
+	func(N-1) ++ [lists:foldl(fun(X, Sum)-> X+Sum end, 0, lists:seq(1,N))]. 
+
+ Napisz funkcję, która dla danej listy list scali wszystkie liczby.  
+
+-module(mod). 
+-compile(export_all).  
+
+concatenate([]) -> 
+	[]; 
+concatenate([H|T]) ->
+	H ++ concatenate(T). 
+
+ Napisz funkcję, która odwróci porządek wszystkich elementów w tablicy.  
+
+-module(mod). 
+-compile(export_all).  
+
+reverse([H]) -> 
+	[H]; 
+reverse([H|T]) -> 
+	reverse(T) ++ [H]. 
+
+Napisz funkcję, która dla podanej listy L oraz liczby całkowitej N zwróci listę wszystkich liczb z list L, które są mniejsze bądź równe liczbie N.  
+  
+-module(mod). 
+-compile(export_all).  
+
+filter([H|T], N) when H =< N -> 
+	[H | filter(T, N)]; 
+filter(_, _) ->   
+	[].   
+
+1. Napisz funkcję sum/1, która dla podanej liczby naturalnej N zwróci sumę wszystkich liczb naturalnych od 1 do N.  
+
+-module(mod). 
+-compile(export_all). 
+
+sum(1) -> 
+	1; 
+sum(N) -> 
+	N + sum(N-1).   
+
+2. Napisz funkcję sum/2, która dla danych liczb N i M, gdzie N<=M, zwróci sumę liczb pomiędzy N i M. Jeżeli N>M, to zakończ proces.  
+
+-module(mod). 
+-compile(export_all).  
+
+sum(N, M) when N > M -> 
+	exit(self(), kill);
+sum(M, M) -> 
+	M;  
+sum(N, M) -> 
+	N + sum(N+1, M).  
+
+3. Napisz funkcję, która dla danego N zwróci listę postaci [1,2,...,N-1,N].  
+-module(mod). 
+-compile(export_all). 
+
+create(N) -> 
+	create(1, N).   
+ 
+create(N, N) -> 
+	[N]; 
+create(A, N) -> 
+	[A | create(A+1, N)]. 
+
+4. Napisz funkcję, która dla danego N zwróci listę formatu [N,N-1,...,2,1].  
+-module(mod).
+-compile(export_all).  
+
+reverse_create(0) -> [];
+reverse_create(N) -> 
+	[N | reverse_create(N-1)].   
+
+5. Napisz funkcję, która wyświetli liczby naturalne pomiędzy 1 a N. Każda liczba ma zostać wyświetlona w nowym wierszu.  
+-module(mod). 
+-compile(export_all). 
+
+func(N) -> 
+	func(1, N).  
+func(N, N) ->   
+	io:format("Number:~p~n",[N]); 
+func(A, N) ->    
+	io:format("Number:~p~n",[A]),  
+	func(A+1, N).   
+
+6. Napisz funkcję, która wyświetli wszystkie liczby parzyste pomiędzy 1 a N. Każda liczba ma zostać wyświetlona w nowym wierszu.  
+-module(mod).
+-compile(export_all).  
+
+func(N)  when N > 1 -> 
+	func(2, N); 
+func(_) -> {brak}.  
+
+func(A, N) when A =< N ->  
+	io:format("Number:~p~n",[A]),     
+	func(A+2, N); f
+func(_, _) ->     {koniec}
+
+szkielet obsługi wyjątków w języku Ada?  
+begin -- . . . 
+exception 
+when Constraint_Error | Program_Error =>  
+	     --. . . w
+when Storage_Error --. . . 
+when others => --. . . 
+end ;   
+
+Ada. Znajdź element maksymalny w tablicy i podziel wszystkie elementy przez niego.  
+
+with Ada.Text_IO; 
+use Ada.Text_IO;  
+
+procedure Max_I_Podziel is Arr : 
+
+Array (1..10) of Float; 
+Max : Float;  
+ 
+begin 
+	Arr := ( 1..2 => 2.0, 5..8 => 4.0, others => 1.0);  
+	Max :=  Arr(Arr'First); 
+	for I in Arr'Range loop 
+			   if Max < Arr(I) then 
+				      Max := Arr(I); 
+			   end if; 
+	end loop;  
+	Put_Line("Max: " & Max'Img);
+
+	for I in Arr'Range loop 
+			Arr(I) := Arr(I) / Max; 
+			Put_Line(I'Img & ":" & Arr(I)'Img); 
+	end loop;
+end Max_I_Podziel;   
