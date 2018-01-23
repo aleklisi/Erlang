@@ -318,3 +318,35 @@ Napisz procedure w ktorej moze dojsc do zgloszenia wyjatku Name_Error wraz z prz
   exception
     when Name_Error => Create (File, Mode, Name);
   end Open_or_Create;
+
+Operacje bitowe mozemy wykonywac na TYPIE RESZTOWYM
+
+Typy kontrolowane w Adzie -> pozwalaja programiscie na zdefiniowanie metod wykonywanych przy: inicjalizacji,
+finalziacji i poprawianiu po przypisaniu.
+
+Dla typu ograniczonego w Adzie: nie sa automatcyznie generowane operatory: :=, =, /=
+
+lists:foldl(fun(X, Sum) -> X-Sum end, 0, [1,2,3,4,5]).
+Wynik: 3.
+
+bariery nie sa wartosciowane w obiekcie chronionym po wykonaniu funkcji
+
+Wyroznik pozwala na parametryzacje wybranych typow
+
+funkcja musi miec wszystkie parametry typu in 
+function DFile(X: in A) retrun D
+
+lists:zipWith(fun(X,Y) -> [X,[X|[Y]]] end, [1,2,3], [a,b,c]).
+[[1,[1,a]],[2,[2,b]], [3,[3,c]]]
+
+Instrukcja abort powoduje natychmiastowe bezwarunkowe zakonczenie zadania
+
+Parametr klasowy T'Class:
+			   - obejmuje wszystkie typy wyprowadzone z T
+			    - pozwala na przechowywanie wartosci dowolnego typu wyprowadzonego z T
+			    - wchodzac w sklad parametrow podprogramow wyklucza je z operacji podstawowych
+			    
+false: ma zawsze staly rozmiar i dlatego pozwala na wskazywanie dowolnego typu pochodnego
+			    
+Wykonanie w przeplocie: jedno zadanie wykonywane w danym momencie, kilka rozpoczetych
+			   
