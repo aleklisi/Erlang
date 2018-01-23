@@ -209,3 +209,28 @@ Result: [london, boston, vancouver].
 
 time() -> ?TIMEOUT.
 
+!!!!!ADA
+fragment kodu ktory bedzie uruchamial procedure blabla co 0.5 s kod ma niwelowac wplyw dlugosci wykonania procedury na czas pomiedzy uruchumieniami. Procedura ma sie wykonywac zawsze mniej niz 0.5 s
+
+procedure Pol_Sec is 
+
+	procedure blabla is 
+	begin 
+		//delay 0.3;
+		Put_Line("Blabla");
+	end blabla;   
+ 
+	Loop_Time : Time_Span := To_Time_Span(0.5);
+	Next_Loop_Time : Time;  
+	begin 
+	Next_Loop_Time := Clock; 
+
+	loop 
+		
+		blabla;
+
+		Next_Loop_Time := Next_Loop_Time + Loop_Time;
+		delay until Next_Loop_Time;
+	end loop;
+
+end Pol_Sec;
