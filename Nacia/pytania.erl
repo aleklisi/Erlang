@@ -306,7 +306,7 @@ procedure Hello is
 		end Dzielnie;
 
 	begin
-		Put("Podziel: 3/3 & Dzielenie(3,3)");
+		Put("Podziel: 3/3 = " & Dzielenie(3,3)'Img);
 	end Hello;
 
 Napisz procedure w ktorej moze dojsc do zgloszenia wyjatku Name_Error wraz z przykkladowo obsluga
