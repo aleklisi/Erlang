@@ -192,6 +192,18 @@ generate(N) -> [1 || _ <- lists:seq(1,N)].
 
 generate2(Elem,N) -> [Elem || _ <- lists:seq(1,N)].
 
+Weather = [{toronto, rain}, {montreal, storms}, {london, fog}, {paris, sun}, {boston, fog}, {vancouver, snow}].
+[X || {X,Y} <- Weather, (Y == fog) or (Y == snow)].
+
+Result: [london, boston, vancouver].
+
+[{(X),Y} || X <- [1,2,3], Y <- [a,b]].
+[{1,a}, {1,b}, {2,a}, {2,b}, {3,a}, {3,b}].
+
+[X+Y || X <- [1,2], Y <- [2,3]].
+[3,4,4,5].
+
+
 %<text>Zdefiniuj stałą dla całego modułu TIMOUT na wartosc 200
 -define(TIMEOUT, 200).
 
