@@ -310,3 +310,10 @@ procedure Hello is
 	end Hello;
 
 Napisz procedure w ktorej moze dojsc do zgloszenia wyjatku Name_Error wraz z przykkladowo obsluga
+ procedure Open_or_Create (File: in out File_Type;
+                            Mode: File_Mode; Name: String) is
+  begin
+    Open (File, Mode, Name);
+  exception
+    when Name_Error => Create (File, Mode, Name);
+  end Open_or_Create;
