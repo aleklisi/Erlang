@@ -359,4 +359,98 @@ identyfikator w Adzie:
 		           - nie moze zaczynac sie od cyfry
 		           - nie moze zawiera znaku specjalnego innego niz _
 		       
-		      
+Napisz funkcję w j. erlang, która podaną listę skróci o połowę uśredniając sąsiednie elementy. 
+Funkcja ma obsługiwać też listy nieparzyste.
+Napisz wersje gdzie ostatni element jest pomijany i doklejany.  dest(0) = (src(0)+src(1))/2 		      
+
+short(X) -> short2(X,[]).
+
+short2([], Res) -> lists:reverse(Res);
+short2([A], Res) -> short2([],[A|Res]); // doklejamy
+short2([A], Res) -> short2([],Res); //pomijamy
+short2([A,B|T], Res) ->
+		Md = (A+B/2),
+		short2(T,[Md|Res]).
+
+Napisz równoległą implementację funkcji map w Erlangu pmap(Fun,[Items]). 
+Funkcja ma uwzględniać błędne działanie funkcji Fun na elementach listy. 
+
+pmap(Function, List) ->   
+	% spawn process for each element, and gather their pids into list   
+	Pids = [spawn(?MODULE,execute, [self(), Function, El]) || El <- List], 
+	%gather the results of the processes (in order) into a list   
+	gather(Pids).  
+
+% Execute the function and send the result back to the receiver
+execute(Recv, Function, Element) ->  
+	Recv ! {self(), catch(Function(Element))}.  
+  
+gather([]) ->
+	[]; 
+gather([H | T]) ->   
+	receive     
+		{H, Ret} ->      
+			[Ret | gather(T)]   
+	end.  
+% example usage % 
+MODULE_NAME:pmap((fun(X)-> 10/X end),[1,2,0,3,4,5,0,-1]).  
+///inna wersja 
+pmap(_,[])->[]; 
+pmap(FUN,L)->    
+	[begin   spawn(?MODULE,usingFun,[self(),FUN,A]),  
+		 receive   
+			 X->X 
+		 end     
+	 end || A<-L].  
+
+usingFun(Pid,FUN,A)->     
+	case catch(FUN(A)) of  
+		B -> Pid!B    
+	end.   
+
+Napisz program, który stworzy 10 zadań i wywoła ich wejścia. 
+Po otrzymaniu wywołaniu wejścia zadania mają się zakończyć (Ada).
+Uwaga!! Program najpierw stworzy wszystkie zadania a później rozpocznie komunikację. 
+
+procedure zad1 is  
+task type A is   
+	entry E; 
+end;  
+
+task body A is 
+begin  
+	accept E; 
+end;  
+
+procesy: array(Integer range 1..10) of A; 
+
+begin   
+	for i in 1..10 loop     
+		procesy(i).E; 
+	end loop; 
+end zad1;   
+
+Napisz w Erlangu „fork bomb”. Funkcja start() ma utworzyć 10 procesów, każdy z nich ma utworzyć kolejnych 10 procesów itd.
+Po stworzeniu wspomnianych 10 procesów każdy proces „ojciec” ma zacząć wysyłać do nich wiadomości w nieskończonej pętli
+
+start() -> 
+	Pids = [ spawn(fun start/0) || _ <- lists:seq(1,10)], 
+	loop(Pids).  
+
+loop(Pids) -> 
+	lists:foreach(fun(Pid) -> Pid ! {starting_pids, Pids} end, Pids),
+	loop(Pids).
+
+Napisz program w j. Erlang, który stworzy 100 procesów. 
+Po stworzeniu wszystkich procesów program ma odczekać 2 sek i wysyłać do stworzonych procesów wiadomość 'pa'. 
+Po otrzymaniu wiadomości procesy potomne mają wypisać swój pid i zakończyć się. 
+
+start() -> 
+	Pids = [ spawn(fun dziecko/0) || _ <- lists:seq(1,100)], 
+	timer:sleep(2000), 
+	lists:foreach(fun(Pid) -> Pid ! pa end, Pids).  
+
+dziecko() -> 
+	receive 
+		pa -> io:fwrite("~p~n",[self()]) 
+	end. 
