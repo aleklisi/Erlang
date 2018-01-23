@@ -350,3 +350,13 @@ false: ma zawsze staly rozmiar i dlatego pozwala na wskazywanie dowolnego typu p
 			    
 Wykonanie w przeplocie: jedno zadanie wykonywane w danym momencie, kilka rozpoczetych
 			   
+CCS dopuszcza, aby def agentow byly wzajmenie rekurencyjne: zawsze
+Wykonanie rownolegle: kilka zadan wykonywanych jednoczesnie
+			   
+identyfikator w Adzie: 
+			   - musi sie zaczynac od litery
+		           - nie moze zawierac spacji
+		           - nie moze zaczynac sie od cyfry
+		           - nie moze zawiera znaku specjalnego innego niz _
+		       
+		      
