@@ -833,3 +833,18 @@ begin
 			Put_Line(I'Img & ":" & Arr(I)'Img); 
 	end loop;
 end Max_I_Podziel;   
+
+Napisz w Erlangu funkcję generującą liczby Fibonacciego na dwa sposoby: rekurencyjnie i iteracyjnie.  
+
+fibo_reku(0) -> 0; 
+fibo_reku(1) -> 1;  
+ 
+fibo_reku(N) -> 
+	fibo_reku(N-1) + fibo_reku(N-2).  
+
+fibo_iter(N) -> 
+	fibo_iter(N, 0, 1). 
+fibo_iter(0, Wynik, _) -> Wynik; 
+fibo_iter(Iter, Wynik, Next) -> 
+	fibo_iter(Iter-1, Next, Wynik+Next).
+
