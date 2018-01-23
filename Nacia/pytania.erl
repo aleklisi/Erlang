@@ -238,10 +238,11 @@ end Pol_Sec;
 Funkcja wyliczajaca silnie rekurencyjnie (ADA) dla blednych danych zglos wyjatek
 
 function Factorial (N : Integer) return Integer is
+	Error_Negative: exception;
 begin
    
    if N <= 0 then
-	Put("The argument is negative !!");
+	raise Error_Negative with "Arg jest ujemny";
 end if;
 	    
    if N = 1 then
