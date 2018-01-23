@@ -454,3 +454,47 @@ dziecko() ->
 	receive 
 		pa -> io:fwrite("~p~n",[self()]) 
 	end. 
+
+Napisz fragment kodu w języku Ada, który pozwoli max przez 5sek oczekiwać na zakończenie wykonania procedury "FixWorld(W:World)".
+Jeśli procedura się nie zakończy w tym czasie to ma zostać wyświetlony komunikat. 
+
+with ada.text_io; 
+use ada.text_io; 
+
+procedure fixworld is 
+
+procedure xx is
+begin    
+	delay 3.0;     
+	put_line("xx");
+end xx;  
+
+begin     
+
+select  
+  	delay 2.0;
+  	put_line("nie wykonano xx");     
+	then 
+		abort   xx; 
+end select;  
+end fixworld;   
+
+Napisz w Erlangu sam kod procesu, który będzie odsyłał do nadawcy jego własną wiadomość.
+Przychodząca wiadomość ma format {Pid,Data}. Gdzie Pid to identyfikator procesu nadawcy a Data to wiadomość do odesłania.
+Jeśli proces otrzyma wiadomości, 
+	które nie pasują do podanego wzorca to mają one zostać usunięte z kolejki i zignorowane. 
+
+loop() -> 
+	receive 
+		{Pid,Data} -> Pid ! {Pid,Data};
+		_ -> ok 
+	end, 
+	loop(). 
+
+Napisz kod implementujący zegar Lamporta. (Pojedyncza funkcja procesu.) 
+lamport(N) ->    
+	receive  
+		{msg,T} when  T> N ->  lamport(T+1); 
+		{msg,T} when  T =< N ->  lamport(N+1) 
+	end.  
+
