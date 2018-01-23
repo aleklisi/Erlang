@@ -12,6 +12,9 @@
 
 %lists:foldl(fun(X,Prod)-> X * -Prod end, 1, [1, 2, 3]). odp -6
 
+%Jaka operaje mozesz wykonac na nieskonczonej liscie?
+%tylko foldr nie foldl
+
 %Napisz funkcje o nazwie my_fun która zwraca liczbę losową typu float z przedziału 2 do 4.
 
 my_fun() -> (rand:uniform() + 1)  * 2.
@@ -57,6 +60,17 @@ map_add2(Map,Key,Value)-> Map#{Key => Value}.
 map_update(Map,Key,Value) -> map_add(Map,Key,Value).
 map_update2(Map,Key,Value) -> Map#{Key => Value}.
 map_update3(Map,Key, Value)-> Map#{ Key := Value}.
+
+NiechdanyjestPID=<1.2.3>orazwiadomoscwpostaciatomuotrescimessage.którezponizszychwysyławwwiadomoscdoprocesuowwpidzie?
+
+PID!message.
+
+Danyjestmoduł moj_mod,
+	któryzawierafunkcj moja_fun 
+			     któraprzyjmujejakoargumentlisteliczbcałkowitych.
+NapiszkodktóryuruchomiwwfunkcjejakoNOWYporceszlistaliczb 1,2,3,4,5,6,7 jakoargument
+
+spawn(moj_mod, moja_funk, lists:seq(1,7)).
 
 %Napisz funkcje o nazwie solution która bedzie oczekiwała na wiadomosc message i zwróci ok gdy ja dostanie
 
@@ -116,11 +130,33 @@ gather_all(PIDs,Results) ->
 %Napisz kod który zwróci najmniejszy element listy.
 
 smallest(List) -> lists:min(List).
+
 %definicja odpowienika kropki w haskellu
 % DOT = fun(A,B) -> fun(X) -> A(B(X)) end end.
     
 %Stwórz mape a => 1, b => 2, c => 3
 map() -> #{a=>1,b=>2,c=>3}.
+
+napisz kod eportujacy funkcje f/2 danego zdanego modułu
+-export([f/2]).
+
+napisz kod importujacy funkcje f/2 z modułu moj_mod
+-import(moj_mod,[f/2]).
+
+Dana sa listy
+L1 = lists : seq(1, 9).
+L2 = lists : seq(1, 5).
+dopisz kod zwracajacy liste [6, 7, 8, 9]
+
+L1 -- L2.
+lists:subtract(L1,L2).
+
+Dana sa listy
+L1 = lists : seq(1; 5).
+L2 = [a; b; c; d; e].
+dopisz kod zwracajacy liste [1, a, 2, b, 3, c, 4, d, 5, e]
+
+lists:zip(L1,L2).
 
 %lists:foldl(fun(X,Prod) -> {A,B} = X, Prod ++ [A,B] end, [],L5).
 
@@ -191,6 +227,75 @@ generate(N) -> [1 || _ <- lists:seq(1,N)].
 %<text>Napisz program generujący listę o podanej długości składającą się z podanego elementu.
 
 generate2(Elem,N) -> [Elem || _ <- lists:seq(1,N)].
+
+Zdefiniuj stałą dla całego modułu TIMOUT na wartosc 200
+-define(TIMEOUT,200).
+
+time() -> ?TIMEOUT.
+
+jak uruchomic debugger w shellu Erlanga?
+debugger:start().
+
+Jak poprawnie zdefiniować funkcje anonimową w Erlang
+F = fun(X) -> 2*X end.
+
+T1 i T2 są typu Time. Ich różnica będzie typu...
+Duration
+
+Co zrobić, żeby program poczekał?
+Użyc delay
+		 
+Aby linijka "Gen: Generator;" była poprawna, należy użyć 
+		 pakietu:Ada.Numerics.Discrete_Random lub Ada.Numerics.Float_Random
+
+type Wektor is array (Integer range <>) of Float;
+procedure los_wektor(w : in Wektor) is
+begin
+Reset(Gen);
+for E of w loop
+	E := Random(Gen);
+end loop;
+end los_wektor;
+Ta procedura jest:
+
+Niepoprawna. Powinno być "procedure los_wektor(w : in out Wektor) is".
+
+type Wektor is array (Integer range <>) of Float;
+function do_something(w : in Wektor ) return Boolean is
+(for all I in w'First..(w'Last-1) => w(I)<=w(I+1));
+Ta funkcja:
+Sprawdzi, czy wektor jest posortowany niemalejąco.
+
+
+A,B,C są tablicami. "A := B & C;"
+
+Zadziała, o ile A'Range jest równe B'Range + C'Range.
+
+Co nie zakończy zadania w Adzie?
+Wykonanie instrukcji terminate
+Zgłoszenie obsłużonego wyjątku.
+
+Jaka instrukcja pozwala na (normalne) zakończenie zadania?
+break / terminate/ exit/ stop
+
+Jakiego typu musi być wartość przekazana instrukcji delay?
+Duration/ Float/ Integer/ Span
+
+Co jest odpowiednikiem monitora w Adzie?
+monitor/ zmienna dzielona/ obiekt chroniony/ zadanie
+
+Który z atrybutów nie jest dostępny dla typów wyliczeniowych?
+Vat/ Range/ Succl/ Firs
+
+Które zdanie dotyczące funkcji w Adzie nie jest prawdziwe?
+Atrybuty funkcji maja domyślnie tryb in./
+Atrybuty funkcji mogą mieć tryb out./
+Funkcja może zawierać wiele instrukcji return./
+Funkcja musi zawierać przynajmniej jedną instrukcję return./
+
+Wartości jakiego typu nie może przyjmować wyróżnik typu
+rekordowego?
+Character/ Boolean/ Integer/ Float
 
 Weather = [{toronto, rain}, {montreal, storms}, {london, fog}, {paris, sun}, {boston, fog}, {vancouver, snow}].
 [X || {X,Y} <- Weather, (Y == fog) or (Y == snow)].
