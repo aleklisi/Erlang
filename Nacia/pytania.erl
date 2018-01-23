@@ -234,3 +234,18 @@ procedure Pol_Sec is
 	end loop;
 
 end Pol_Sec;
+
+Funkcja wyliczajaca silnie rekurencyjnie (ADA) dla blednych danych zglos wyjatek
+
+function Factorial (N : Integer) return Positive is
+begin
+   exception
+   when N <= 0 => 
+	Put("The argument is negative !!");
+		
+   if N = 1 then
+      return 1;
+   else
+      return (N * Factorial (N - 1));
+   end if;
+end Factorial;
