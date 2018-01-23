@@ -297,10 +297,10 @@ use Ada.Text_IO;
 
 procedure Hello is 
 	function Dzielenie(Dzielna: Integer; Dzielnik: Integer) return Integer is
+		Error_Ujemny : exception;
 		begin
 			if Dzielnik = 0 then
-				   Put("Nie dziel przez 0 !");
-				   return 0;
+				   raise Error_ujemny with "Nie dziel przez 0 !";
 			end if;
 				    
 			return Dzielna/Dzielnik;
