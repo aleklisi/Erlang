@@ -282,10 +282,14 @@ Jakiego typu musi być wartość przekazana instrukcji delay?
 Duration/ Float/ Integer/ Span
 
 Co jest odpowiednikiem monitora w Adzie?
-monitor/ zmienna dzielona/ obiekt chroniony/ zadanie
+monitor/ zmienna dzielona/ obiekt chroniony/ zadanie 
+
+raczej obiekt chroniony
 
 Który z atrybutów nie jest dostępny dla typów wyliczeniowych?
 Vat/ Range/ Succl/ Firs
+
+Mozna: First/Last ; Succ/ Pred ; Pos; Val
 
 Które zdanie dotyczące funkcji w Adzie nie jest prawdziwe?
 Atrybuty funkcji maja domyślnie tryb in./
