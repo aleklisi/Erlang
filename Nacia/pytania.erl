@@ -70,7 +70,7 @@ Danyjestmoduł moj_mod,
 			     któraprzyjmujejakoargumentlisteliczbcałkowitych.
 NapiszkodktóryuruchomiwwfunkcjejakoNOWYporceszlistaliczb 1,2,3,4,5,6,7 jakoargument
 
-spawn(moj_mod, moja_funk, lists:seq(1,7)).
+spawn(moj_mod, moja_funk, [lists:seq(1,7)]).
 
 %Napisz funkcje o nazwie solution która bedzie oczekiwała na wiadomosc message i zwróci ok gdy ja dostanie
 
