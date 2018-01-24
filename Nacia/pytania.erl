@@ -953,3 +953,63 @@ fibo_iter(0, Wynik, _) -> Wynik;
 fibo_iter(Iter, Wynik, Next) -> 
 	fibo_iter(Iter-1, Next, Wynik+Next).
 
+
+Funkcja sumujaca dwie liczby zespolone ADA
+with Ada.Text_IO; use Ada.Text_IO;
+procedure Hello is
+
+type Zespolone is 
+    record
+        Re: Float;
+        Im: Float;
+    end record;
+    
+procedure dodaj_zespolone(z1: in Zespolone; z2: in Zespolone; res: in out Zespolone ) is
+begin
+    res.Re := z1.Re + z2.Re;
+    res.Im := z1.Im + z2.Im;
+end dodaj_zespolone;
+
+z1: Zespolone;
+z2: Zespolone;
+res: Zespolone;
+
+begin
+    Put_Line ("Hello, world!");
+    z1.Re := 1.0;
+    z1.Im := 2.5;
+    
+    z2.Re := 2.0;
+    z2.Re := 2.5;
+    
+    dodaj_zespolone(z1,z2,res);
+    
+    Put_Line("Res: " & res.Re'Img & "i" & res.Im'Img );
+    
+end Hello;
+
+function dodaj_zespolone(z1: Zespolone; z2: Zespolone) return Zespolone is
+Res: Zespolone;
+begin
+    Res.Re := z1.Re + z2.Re;
+    Res.Im := z1.Im + z2.Im;
+    return Res;
+end dodaj_zespolone;
+
+Funkcja spr czy zadana liczba jest pierwsza
+function czy_pierwsza(n: Integer) return Boolean is
+I: Integer;
+begin
+    if (n < 2) then 
+        return false;
+    end if;
+    I:= 2;
+    while (I*I <= n) loop
+        if (n mod I = 0) then
+            return false;
+        end if;
+        I := I + 1;
+   end loop;
+   
+   return true;
+end czy_pierwsza;
