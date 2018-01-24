@@ -289,7 +289,7 @@ Vat/ Range/ Succl/ Firs
 
 Które zdanie dotyczące funkcji w Adzie nie jest prawdziwe?
 Atrybuty funkcji maja domyślnie tryb in./
-Atrybuty funkcji mogą mieć tryb out./
+Atrybuty funkcji mogą mieć tryb out./ (NIE MOGA MIEC)
 Funkcja może zawierać wiele instrukcji return./
 Funkcja musi zawierać przynajmniej jedną instrukcję return./
 
