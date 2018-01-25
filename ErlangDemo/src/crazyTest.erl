@@ -26,3 +26,5 @@ gen_numbers_all() -> [100*X + 10*Y +Z ||
             X <- list(1), Y <- list(0), Z <- list(0),
                 X /= Y, Y /= Z, X /= Z].
 
+dot(F,G) -> fun(X) -> F(G(X)) end.
+% DOT = fun(A,B) -> fun(X) -> A(B(X)) end end.
