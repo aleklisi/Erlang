@@ -37,7 +37,7 @@ loop(X,Turbines,GotheredData) ->
             insert_gathered_data(Res,Tur,Pred)end,
             GotheredData,
             lists:zip(OutPut,Turbines)),
-    present_data(NewGatheredData),
+    %present_data(NewGatheredData),
     loop(X - 1,Turbines,NewGatheredData).
 
 create_turbine_names(Num) ->
