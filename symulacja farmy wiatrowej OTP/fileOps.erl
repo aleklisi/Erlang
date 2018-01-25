@@ -1,5 +1,4 @@
 -module(fileOps).
--author('AlekLisiecki').
 -export([read_file/2, file_to_list_of_floats/2]).
 
 read_file(FileName,Separator) ->

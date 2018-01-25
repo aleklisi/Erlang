@@ -24,19 +24,19 @@ deploy_symulation(NumberOfWindTurbines,StepsLeft,TurbineParameters,ModelOfTurbin
     TurbinesPIDs = deploy_multiple_turbines({State,Radius,Efficiency,PlantPID,Timebase},
         WeatherModulePID,NumberOfWindTurbines,ModelOfTurbine),
     PlantPID ! {windTurbinePIDs,TurbinesPIDs},
-    run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID).
+    run(StepsLeft,0,PlantPID,TurbinesPIDs,WeatherModulePID).
 
-run(0,PlantPID,TurbinesPIDs,WeatherModulePID) -> 
+run(0,_,PlantPID,TurbinesPIDs,WeatherModulePID) -> 
     timer:sleep(5),
     PlantPID ! endOfSymulation,
     WeatherModulePID ! endOfSymulation,
     send_to_all_from_list(TurbinesPIDs,endOfSymulation);
-run(StepsLeft,PlantPID,TurbinesPIDs,WeatherModulePID) ->
-    timer:sleep(10),
+run(StepsLeft,H,PlantPID,TurbinesPIDs,WeatherModulePID) ->
+    timer:sleep(100),
     io:fwrite("Step ~p started\n",[StepsLeft]),
-    Message = {getPowerFromTurbines,StepsLeft},
+    Message = {getPowerFromTurbines,H},
     PlantPID ! Message,
-    run(StepsLeft - 1,PlantPID,TurbinesPIDs,WeatherModulePID).
+    run(StepsLeft - 1,(H+1) rem 24,PlantPID,TurbinesPIDs,WeatherModulePID).
 
 
-example_run() -> deploy_symulation(10,4,{working,1,5},"Endurance E-4160 Wind Turbine",1).
+example_run() -> deploy_symulation(2,25,{working,1,5},"Endurance E-4160 Wind Turbine",1).

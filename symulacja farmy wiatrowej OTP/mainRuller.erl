@@ -1,5 +1,4 @@
 -module(mainRuller).
--author('AlekLisiecki').
 -behaviour(application).
 -export([start/2, stop/1]).
 -export([run_simulation/2, loop/3, create_turbine_names/1, write_output/2, insert_gathered_data/3]).
@@ -37,7 +36,6 @@ loop(X,Turbines,GotheredData) ->
             insert_gathered_data(Res,Tur,Pred)end,
             GotheredData,
             lists:zip(OutPut,Turbines)),
-    %present_data(NewGatheredData),
     loop(X - 1,Turbines,NewGatheredData).
 
 create_turbine_names(Num) ->

@@ -40,6 +40,7 @@ run_plant(WindTurbinesPIDs,ToalPowerGothered) ->
             run_plant(WindTurbinesPIDs,ToalPowerGothered + Sum);
         endOfSymulation ->
             io:fwrite("Plant: Power gothered form all turbines in all steps is ~p kWh\n",[ToalPowerGothered]),
+            write_to_file(pom(ToalPowerGothered)),
             io:fwrite("Plant: End of Symulation ~p\n",[self()]),
             exit("End of Symulation\n");
         _ -> 
@@ -47,3 +48,7 @@ run_plant(WindTurbinesPIDs,ToalPowerGothered) ->
     end,
     run_plant(WindTurbinesPIDs,ToalPowerGothered).
  
+ write_to_file(Data) -> file:write_file("./out/turbine", io_lib:fwrite("~p.\n", [Data]),[append]).
+
+pom (Power) -> 
+lists:flatten(io_lib:format("Calkowita moc zebrana to: ~p kWh",[Power])).

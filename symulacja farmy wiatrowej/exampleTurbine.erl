@@ -34,6 +34,8 @@ get_power(WindSpeed) ->
 
 run(working,WeatherModulePID,Timebase) ->
     WindSpeed = weather:get_wind_speed(WeatherModulePID),
-    Timebase * get_power(WindSpeed);
-run(notworking,_,_) -> 0;
+    {Timebase * get_power(WindSpeed),WindSpeed};
+run(notworking,WeatherModulePID,_) ->
+    WindSpeed = weather:get_wind_speed(WeatherModulePID),
+     {0,WindSpeed};
 run(_,_,_) ->  erlang:error("Wind turbine rached unreachable state!!!\n").

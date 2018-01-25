@@ -6,7 +6,7 @@ run(State,Radius,Efficiency,WeatherModulePID,Timebase) ->
     AirDencity = weather:get_air_density(AirTemperature),
     WindSpeed = weather:get_wind_speed(WeatherModulePID),
     TurbineArea = get_wind_turbine_area(Radius),
-    Timebase * get_accual_power(State,WindSpeed,TurbineArea,AirDencity,Efficiency).
+    {Timebase * get_accual_power(State,WindSpeed,TurbineArea,AirDencity,Efficiency),WindSpeed}.
 
 %Radius[m], result in m^2
 get_wind_turbine_area(Radius) -> math:pi() * Radius * Radius.

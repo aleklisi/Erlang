@@ -1,5 +1,4 @@
 -module(exampleTurbine).
--author('AlekLisiecki').
 -export([power_table/0,find_division/2,get_power/1,run/2]).
 %data form  https://rf2.tthtesting.co.uk/windpower/wind-turbines/endurance-e-4660-85-kw-wind-turbine/
 %by reimplemeting powertable one can validate real models :D

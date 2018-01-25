@@ -1,5 +1,4 @@
 -module(plant).
--author('AlekLisiecki').
 -behaviour(supervisor).
 -export([create_turbine_name/1, start_link/1, create_wind_turbines/1]).
 -export([init/1]).

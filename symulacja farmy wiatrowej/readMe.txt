@@ -23,8 +23,9 @@ deploy:example_run().
 % Radius is an float grater than 0,
 % Efficiency is an float grater than 0,
 % ModelOfTurbine = "Endurance E-4160 Wind Turbine" |"theoreticalTurbine"
+%
 
-deploy:deploy_symulation(NumberOfWindTurbines,StepsLeft,{State,Radius,Efficiency},ModelOfTurbine).
+deploy:deploy_symulation(NumberOfWindTurbines,StepsLeft,{State,Radius,Efficiency},ModelOfTurbine,Tmebase).
 
 
 
