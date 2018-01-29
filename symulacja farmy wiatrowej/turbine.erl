@@ -31,4 +31,7 @@ write_to_file(Data) -> file:write_file("./out/turbine", io_lib:fwrite("~p.\n", [
 
 pom (Step,Power,PowerPlantPID,WindS) -> 
 WindSpeed = round(WindS * 100)/100, 
-lists:flatten(io_lib:format("Godzina: ~p:00, moc: ~p kWh, predkosc wiatru: ~p [m/s] turbina PID ~p",[Step,Power,WindSpeed,PowerPlantPID])).
+lists:flatten(
+    io_lib:format(
+        "Godzina: ~p:00, moc: ~p kWh, predkosc wiatru: ~p [m/s] turbina PID ~p",
+        [Step,Power,WindSpeed,PowerPlantPID])).
