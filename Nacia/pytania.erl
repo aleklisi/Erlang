@@ -1151,3 +1151,10 @@ begin
  return wynik;
 end;
 
+Rodzaje typów wskaźnikowych Ada : ograniczony, ogólny
+						
+Zabronione konstrukcje w profilu Ravenscar: instrukcja select
+						     
+Zadanie sporadyczne sluzy do reakcji na zdarzenie ASYNCHRONICZNE
+						     
+						     
