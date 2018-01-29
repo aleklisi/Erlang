@@ -1042,4 +1042,112 @@ skroc_doklej([H]) -> [H];
 skroc_doklej([H1,H2|T]) -> [(H1+H2)/2 | skroc_doklej(T)].
 
 
- 
+Napisz w Adzie szkielet programu do obsługi przerwań (sygnałów).
+protected Sensor is
+procedure Int_Handler;
+pragma Attach_Handler(Int_Handler, InterruptID);
+private
+-- ...
+end;
+protected body Sensor is
+procedure Int_Handler is
+begin
+-- ...
+end;
+-- ...
+end;
+
+Napisz fragment kodu w języku Ada, który pozwoli max przez 5sek
+oczekiwać na zakończenie wykonania procedury „FixWorld(W:World)”.
+Jeśli procedura nie zakończy się w tym czasie, to ma zostać wyświetlony
+komunikat.
+
+with Ada.Text_IO;
+use Ada.Text_IO;
+
+procedure zad is
+
+type World is range 1..10;
+W:World := 5;
+
+procedure FixWorld(S:World) is
+begin
+ Put_Line("World fixed!");
+end;
+
+task A is
+ entry E;
+end;
+
+task body A is
+begin
+ delay 10.0; -- opoznienie, zeby A.E nie moglo sie wykonac
+ accept E;
+ FixWorld(W);
+end;
+
+begin
+ select
+ A.E;
+ or
+ delay 5.0;
+ Put_Line("World cannot be fixed!");
+ end select;
+end zad;
+
+ Napisz kod w języku Erlang, który uruchomi 2 procesy A i B. Proces A
+będzie wysyłał do B wiadomość co 1sek i oczekiwał max 200ms na
+odpowiedź. Jeśli odpowiedź nie nadejdzie, to wyświetli komunikat i
+zakończy działanie.
+
+-module(procesy).
+-export([procA/1, procB/0]).
+
+procA(Pid) ->
+	Pid ! {msg,self()},
+	receive
+		ans ->
+			io:format("Proces A odebral odpowiedz.~n",[]),
+		timer:sleep(1000),
+		procA(Pid)
+			after 200 ->
+				io:format("Proces A nie odebral odpowiedzi.~n",[])
+	end.
+	
+procB() ->
+	receive
+		{msg,Pid} ->
+			io:format("Proces B odebral wiadomosc.~n",[]),
+		Pid ! ans
+	end.
+	
+Pid = spawn(procesy, procB, []),
+spawn(procesy, procA, [Pid]).
+
+ deklaracje zmiennej A anonimowego typu tablicowego, będącej 20-el. tablicą o elementach logicznych i
+indeksach od 10 do 29.
+
+A : array(10..29) of Boolean;
+
+• deklarację procedury P przyjmującej dwa argumenty x i y będące liczbami całkowitymi nieujemnymi,
+przekazywane w trybie wejściowo-wyjściowym.
+
+procedure P(x, y: in out Natural);
+
+Napisz definicję typu Config będącego tablicą wartości całkowitych o nieokreślonych indeksach. Napisz definicję
+funkcji Store, która jako argument przyjmuje tablice typu Config i zwraca jako wynik liczbę dodatnich wartości
+w tej tablicy.
+ada:
+type Config is array(Integer range <>) of Integer;
+
+function Store(X: Config) return Integer is
+ wynik : Integer := 0;
+begin
+ for i in X'Range loop
+ if X(i) > 0 then
+ wynik := wynik + 1;
+ end if;
+ end loop;
+ return wynik;
+end;
+
