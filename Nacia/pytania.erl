@@ -372,6 +372,7 @@ myReverse([H|T], Result) -> myReverse(T,[H]++Result).
 Program wyliczajacy trojki pitagoresjkie od 1..n
 wynik ma byc lista ktorek
 
+pyth(_) when N =< 0 -> erlang:error("N <= 0");
 pyth(N) ->     [ {A,B,C} ||
 		A <- lists:seq(1,N),  
 		B <- lists:seq(1,N),  
@@ -1017,3 +1018,28 @@ begin
    
    return true;
 end czy_pierwsza;
+
+ADA 
+ «A:4,B:4,C:8» = «56,66». A=3,B=8,C=8#102
+ 
+ Przykładem dekompozycji eksploracyjnej nie jest: qsort
+ 
+ Spotkania w Adzie są niesymetryczne
+ 
+ Prawo Amdahla służy do określenia maksymalnego spodziewanego zwiększenia wydajności całkowitej systemu jeżeli tylko 
+ część systemu została ulepszona.
+ 
+ Napisz funkcję w j. erlang, która podaną listę skróci o połowę uśredniając sąsiednie elementy. 
+ Funkcja ma obsługiwać też listy nieparzyste. Napisz wersje gdzie ostatni element jest pomijany i 
+ doklejany. dest(0) = (src(0)+src(1))/2
+ 
+ skroc_pomin([]) -> [];
+skroc_pomin([H]) -> [];
+skroc_pomin([H1,H2|T]) -> [(H1+H2)/2|skroc_pomin(T)].
+
+skroc_doklej([]) -> [];
+skroc_doklej([H]) -> [H];
+skroc_doklej([H1,H2|T]) -> [(H1+H2)/2 | skroc_doklej(T)].
+
+
+ 
