@@ -161,3 +161,11 @@ thread(Fun,Elem,ParentPID) ->
     catch
         X:Y -> ParentPID ! {error,X,Y,Elem,Fun}
     end.
+
+monad(empty,_Fun) -> empty;
+monad({maybe,A},Fun) ->
+    try
+        {maybe,Fun(A)}
+    catch
+        _:_ -> empty
+    end.
