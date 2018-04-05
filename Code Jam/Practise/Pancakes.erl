@@ -1,44 +1,18 @@
 -module(pancakes).
 -author('AlekLisiecki').
--compile(export_all).
+-export([run/0]).
+-import(input, [get_input/1, separate_cases/1, group_cases/1]).
+-import(output,[write_results_to_file/1, single_result/2]).
 
-% cd("C:/Users/sebac/Documents/Erlang/Programs/Erlang/Code Jam/Practise").
+% cd("C:/Users/alekl/source/repos/Erlang/Code Jam/Practise").
 
 run() ->
-    InputString = get_input(),
+    InputString = get_input("A-small-practice.in"),
     [_NumerOfCasesString|SeparatedCases] = separate_cases(InputString),
     GroupedCases = group_cases(SeparatedCases),
     SolvedCases = lists:map(fun(X) -> solve_case(X,15) end, GroupedCases),
-    write_results_to_file(SolvedCases,1).
+    write_results_to_file(SolvedCases).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-get_input() ->
-    {ok,Input} = file:read_file("A-small-practice.in"),
-    binary:bin_to_list(Input).
-
-separate_cases([]) -> [];
-separate_cases(String) -> 
-    ReplacendNewLines = string:replace(String,"\n"," ",all),
-    string:split(ReplacendNewLines," ",all).
-
-group_cases([]) -> [];
-group_cases([[]]) -> [];
-group_cases([H1,H2|T]) -> [{H1,list_to_integer(H2)}] ++ group_cases(T).
-
-number_cases([],_) -> [];
-number_cases([{Pancakes,FlipperSize}|T],CaseNumber) ->
-    [{Pancakes,FlipperSize,CaseNumber}] ++ number_cases(T,CaseNumber + 1).
-
-write_results_to_file([],_) -> ok;
-write_results_to_file([H|T],CaseNumber) ->
-    FileOutput = single_result(CaseNumber,H),
-    file:write_file("out.txt", FileOutput, [append]),
-    write_results_to_file(T,CaseNumber + 1).
-
-single_result(CaseNumber,impossible) ->
-    io_lib:format("Case #~p: IMPOSSIBLE\n",[CaseNumber]);
-single_result(CaseNumber,CaseResult) -> 
-    io_lib:format("Case #~p: ~p\n",[CaseNumber,CaseResult]).
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
  timeout_solve([Pancakes],StepsLeftToSolve,0,FlipperSize)->
     YourTimeOut = 100 * 1000,
     Self = self(),
